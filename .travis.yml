@@ -5,7 +5,7 @@ language: haxe
 
 haxe:
   - "3.2.1"
-  - development
+  #- development
   
 matrix:
   allow_failures:
@@ -16,4 +16,5 @@ install:
   - haxelib run travis install
   
 script:
+  - php --version
   - haxelib run travis interp
