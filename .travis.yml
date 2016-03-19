@@ -16,4 +16,4 @@ install:
   - haxelib run travis install
   
 script:
-  - haxelib run travis php
+  - haxelib run travis interp

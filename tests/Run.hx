@@ -5,7 +5,7 @@ import travis.Travis;
 class Run {
 
   static function main() {
-    trace('hello, world');
+    return Sys.command('php', ['--version']);
   }
   
 }
