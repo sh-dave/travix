@@ -17,7 +17,5 @@
 	"version": "0.0.0",
 	"url": "http://github.com/back2dos/travis/",
 	"dependencies": {
-    "tink_core": "",
-    "buddy": "1.0.0"
 	}
 }
