@@ -1,0 +1,23 @@
+{
+	"name": "foxhole",
+	"license": "MIT",
+	"tags": [
+		"ci",
+    "travis",
+		"build",
+		"tool"
+	],
+	"classPath": "src",
+	"description": "Travis helper",
+	"contributors": [
+		"back2dos"
+	],
+  "main": "travis.Travis",
+	"releasenote": "First haxelib release.",
+	"version": "0.0.0",
+	"url": "http://github.com/back2dos/travis/",
+	"dependencies": {
+    "tink_core": "",
+    "
+	}
+}

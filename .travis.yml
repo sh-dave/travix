@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+
+language: haxe
+
+haxe:
+  - "3.2.1"
+  - development
+  
+matrix:
+  allow_failures:
+    - haxe: development
+    
+install:
+  - haxelib dev travis .
+  - haxelib run travis install
+  
+script:
+  - haxelib run travis php
