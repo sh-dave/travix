@@ -1,2 +1,2 @@
 -cp tests
---run Run
+-main Run

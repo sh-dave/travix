@@ -96,6 +96,15 @@ class Travis {
     
   }
   
+  function doPhp() {
+    build(['-php', 'bin/php']);
+    
+    if (tryToRun('php', ['--version']).match(Failure(_, _)))
+      run('sudo', ['apt-get', 'install', 'php5', '-y']);
+      
+    print(run('php', ['bin/php/index.php']));
+  }
+  
   function doInterp() {
     
     build(['--interp']);
