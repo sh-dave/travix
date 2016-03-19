@@ -68,6 +68,8 @@ class Travis {
   
   function doInstall() {
     
+    var info = getInfos();
+    
     run('haxelib', ['dev', info.name, '.']);
     
     switch info.dependencies {
@@ -90,6 +92,10 @@ class Travis {
     
   }
     
+  function doNeko() {
+    
+  }
+  
   function doInterp() {
     
     build(['--interp']);
@@ -110,6 +116,7 @@ class Travis {
     println('  init - initializes a project with a .travis.yml');
     println('  install - installs dependencies');
     println('  interp - run tests on interpreter');
+    println('  neko - run tests on interpreter');
   }
   
   static function main() {
