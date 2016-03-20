@@ -213,7 +213,7 @@ class Travix {
     build(['-php', 'bin/php']);
     
     if (tryToRun('php', ['--version']).match(Failure(_, _)))
-      run('sudo', ['apt-get', 'install', 'php5', '-y']);
+      aptGet('php5', ['-y']);
       
     exec('php', ['bin/php/index.php']);
   }
@@ -247,8 +247,8 @@ class Travix {
   function doCs() {
     
     if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
-      aptGet('mono-devel');
-      aptGet('mono-mcs');
+      aptGet('mono-devel', ['-y']);
+      aptGet('mono-mcs', ['-y']);
     }
       
     var main = getMainClass();
