@@ -24,7 +24,8 @@ enum RunResult {
 
 class Travix {
   static inline var TESTS = 'tests.hxml';
-  static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, flash';
+  static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, java';
+  static inline var ALL = 'interp,neko,python,java,node,flash,cs,cpp';
   static inline var TRAVIS_CONFIG = '.travis.yml';
   
   function new() { }
@@ -61,7 +62,7 @@ class Travix {
     ];
     
     if (platforms.remove('all'))
-      platforms = 'interp,neko,node,python,flash,java,cs,cpp,as3'.split(',');
+      platforms = ALL.split(',');
     
     TRAVIS_CONFIG.saveContent(defaultFile());
   }
@@ -181,24 +182,11 @@ class Travix {
   function aptGet(pckge:String, ?args:Array<String>) 
     run('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
       
-  function doPhp() {
-    build(['-php', 'bin/php']);
-    
-    if (tryToRun('php', ['--version']).match(Failure(_, _)))
-      run('sudo', ['apt-get', 'install', 'php5', '-y']);
-      
-    exec('php', ['bin/php/index.php']);
-  }
-  
   function exec(cmd, ?args) 
     switch command(cmd, args) {
       case 0: 
       case v: exit(v);
     }
-  
-  function doInterp() {
-    build(['--interp']);
-  }
   
   function getMainClass() {
     
@@ -219,6 +207,19 @@ class Travix {
       case Some(v): v;
       default: die('no -main class found in $TESTS');
     }
+  }
+  
+  function doPhp() {
+    build(['-php', 'bin/php']);
+    
+    if (tryToRun('php', ['--version']).match(Failure(_, _)))
+      run('sudo', ['apt-get', 'install', 'php5', '-y']);
+      
+    exec('php', ['bin/php/index.php']);
+  }
+  
+  function doInterp() {
+    build(['--interp']);
   }
   
   function doJava() {
@@ -246,8 +247,8 @@ class Travix {
   function doCs() {
     
     if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
-      run('sudo', ['apt-get', 'mono-devel']);
-      run('sudo', ['apt-get', 'mono-mcs']);
+      aptGet('mono-devel');
+      aptGet('mono-mcs');
     }
       
     var main = getMainClass();
@@ -265,6 +266,11 @@ class Travix {
     exec('neko', ['bin/neko/tests.n']);
   }
   
+  function doPython() {
+    build(['-python', 'bin/neko/tests.n']);
+    exec('neko', ['bin/neko/tests.n']);
+  }
+  
   function doNode() {
     
     installLib('hxnodejs');
@@ -274,7 +280,8 @@ class Travix {
   }  
   
   function doHelp() {
-    println('execs');
+    println('Commands');
+    println('  ');
     println('  init - initializes a project with a .travis.yml');
     println('  install - installs dependencies');
     println('  interp - run tests on interpreter');
