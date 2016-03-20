@@ -180,7 +180,7 @@ class Travix {
   }
   
   function aptGet(pckge:String, ?args:Array<String>) 
-    run('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
+    exec('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
       
   function exec(cmd, ?args) 
     switch command(cmd, args) {
