@@ -205,7 +205,7 @@ class Travix {
     function read(file:String) {
       for (line in file.getContent().split('\n').map(function (s:String) return s.split('#')[0].trim())) 
         if (line.startsWith('-main'))
-          return Some(line.substr(0, 5).trim());
+          return Some(line.substr(5).trim());
         else
           if (line.endsWith('.hxml'))
             switch read(line) {
