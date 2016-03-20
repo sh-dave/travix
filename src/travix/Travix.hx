@@ -131,7 +131,7 @@ class Travix {
   function installLib(lib:String) {
     
     if (tryToRun('haxelib', ['path', lib]).match(Failure(_, _)))
-      run('haxelib', ['install', lib]);
+      exec('haxelib', ['install', lib, '--always']);
       
   }
   
@@ -266,7 +266,7 @@ class Travix {
     installLib('hxnodejs');
     
     build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs']);
-    exec('neko', ['bin/node/tests.n']);    
+    exec('node', ['bin/node/tests.js']);    
   }  
   
   function doHelp() {
