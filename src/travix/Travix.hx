@@ -267,8 +267,8 @@ class Travix {
   }
   
   function doPython() {
-    build(['-python', 'bin/neko/tests.n']);
-    exec('neko', ['bin/neko/tests.n']);
+    build(['-python', 'bin/python/tests.py']);
+    exec('python3', ['bin/python/tests.py']);
   }
   
   function doNode() {
