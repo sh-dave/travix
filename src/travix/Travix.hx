@@ -225,7 +225,7 @@ class Travix {
     
     build(['-java', 'bin/java']);
     
-    exec('java', ['-jar', 'bin/java/$main.jar'])
+    exec('java', ['-jar', 'bin/java/$main.jar']);
   }
   
   function doCpp() {
@@ -248,7 +248,7 @@ class Travix {
     
     build(['-cs', 'bin/cs']);
     
-    exec('mono', ['bin/cs/$main.exe'])
+    exec('mono', ['bin/cs/$main.exe']);
   }
   
     
