@@ -255,7 +255,7 @@ class Travix {
     
     installLib('hxcs');
     
-    build(['-cs', 'bin/cs']);
+    build(['-cs', 'bin/cs/']);
     
     exec('mono', ['bin/cs/$main.exe']);
   }
