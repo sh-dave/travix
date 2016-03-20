@@ -3,6 +3,7 @@ package travix;
 import haxe.DynamicAccess;
 import haxe.Json;
 import sys.FileSystem;
+import haxe.ds.Option;
 import sys.io.*;
 import Sys.*;
 
@@ -100,7 +101,7 @@ class Travix {
       switch p.exitCode() {
         case 0:
           Success(switch p.stdout.readAll().toString() {
-            case '': p.stderr.readAll().toString(); //some commands print to stderr
+            case '': p.stderr.readAll().toString(); //some execs print to stderr
             case v: v;
           });
         case v:
@@ -155,7 +156,7 @@ class Travix {
     }
     run('haxelib', ['install', TESTS, '--always']);  
     
-    command('haxelib', ['list']);
+    exec('haxelib', ['list']);
   }
   
   function getInfos():Infos
@@ -172,19 +173,6 @@ class Travix {
     run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
     
   }
-    
-  function doNeko() {
-    build(['-neko', 'bin/neko/tests.n']);
-    command('neko', ['bin/neko/tests.n']);
-  }
-  
-  function doNode() {
-    
-    installLib('hxnodejs');
-    
-    build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs']);
-    command('neko', ['bin/node/tests.n']);    
-  }
   
   function aptGet(pckge:String, ?args:Array<String>) 
     run('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
@@ -195,15 +183,90 @@ class Travix {
     if (tryToRun('php', ['--version']).match(Failure(_, _)))
       run('sudo', ['apt-get', 'install', 'php5', '-y']);
       
-    command('php', ['bin/php/index.php']);
+    exec('php', ['bin/php/index.php']);
   }
+  
+  function exec(cmd, ?args) 
+    switch command(cmd, args) {
+      case 0: 
+      case v: exit(v);
+    }
   
   function doInterp() {
     build(['--interp']);
   }
   
+  function getMainClass() {
+    
+    function read(file:String) {
+      for (line in file.getContent().split('\n').map(function (s:String) return s.split('#')[0].trim())) 
+        if (line.startsWith('-main'))
+          return Some(line.substr(0, 5).trim());
+        else
+          if (line.endsWith('.hxml'))
+            switch read(line) {
+              case None:
+              case v: return v;
+            }
+            
+      return None;
+    }
+    return switch read(TESTS) {
+      case Some(v): v;
+      default: die('no -main class found in $TESTS');
+    }
+  }
+  
+  function doJava() {
+    
+    var main = getMainClass();
+    
+    installLib('hxjava');
+    
+    build(['-java', 'bin/java']);
+    
+    exec('java', ['-jar', 'bin/java/$main.jar'])
+  }
+  
+  function doCpp() {
+    
+    var main = getMainClass();
+    
+    installLib('hxcpp');
+    
+    build(['-cpp', 'bin/cpp']);
+    
+    exec('./bin/cpp/$main');
+  }
+  
+  function doCs() {
+    
+    //TODO: install mono
+    var main = getMainClass();
+    
+    installLib('hxcs');
+    
+    build(['-cs', 'bin/cs']);
+    
+    exec('mono', ['bin/cs/$main.exe'])
+  }
+  
+    
+  function doNeko() {
+    build(['-neko', 'bin/neko/tests.n']);
+    exec('neko', ['bin/neko/tests.n']);
+  }
+  
+  function doNode() {
+    
+    installLib('hxnodejs');
+    
+    build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs']);
+    exec('neko', ['bin/node/tests.n']);    
+  }  
+  
   function doHelp() {
-    println('Commands');
+    println('execs');
     println('  init - initializes a project with a .travis.yml');
     println('  install - installs dependencies');
     println('  interp - run tests on interpreter');

@@ -18,9 +18,9 @@ install:
 script:
   - haxelib run travis interp
   - haxelib run travis php
-  #- haxelib run travis node
-  #- haxelib run travis neko
+  - haxelib run travis node
+  - haxelib run travis neko
   #- haxelib run travis html
-  #- haxelib run travis java
-  #- haxelib run travis cs
-  #- haxelib run travis cpp  
+  - haxelib run travis java
+  - haxelib run travis cs
+  - haxelib run travis cpp  
