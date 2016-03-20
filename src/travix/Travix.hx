@@ -97,6 +97,7 @@ class Travix {
   
   function tryToRun(cmd:String, ?params:Array<String>) {
     var p = new Process(cmd, params);
+    trace(p.exitCode());
     return
       switch p.exitCode() {
         case 0:
