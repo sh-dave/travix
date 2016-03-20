@@ -22,5 +22,5 @@ script:
   - haxelib run travix neko
   #- haxelib run travix html
   - haxelib run travix java
-  - haxelib run travix cs
+  #- haxelib run travix cs
   - haxelib run travix cpp  

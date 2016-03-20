@@ -131,7 +131,7 @@ class Travix {
   function installLib(lib:String) {
     
     if (tryToRun('haxelib', ['path', lib]).match(Failure(_, _)))
-      exec('haxelib', ['install', lib, '--always']);
+      run('haxelib', ['install', lib, '--always']);
       
   }
   
