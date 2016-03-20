@@ -271,6 +271,10 @@ class Travix {
     exec('python3', ['bin/python/tests.py']);
   }
   
+  function doFlash() {
+    build(['-python', 'bin/swf/tests.swf']);
+  }
+  
   function doNode() {
     
     installLib('hxnodejs');
