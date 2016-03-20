@@ -1,5 +1,5 @@
 {
-	"name": "travis",
+	"name": "travix",
 	"license": "MIT",
 	"tags": [
 		"ci",
@@ -8,11 +8,11 @@
 		"tool"
 	],
 	"classPath": "src",
-	"description": "Travis helper",
+	"description": "Travis helper for Haxe",
 	"contributors": [
 		"back2dos"
 	],
-  "main": "travis.Travis",
+  "main": "travix.Travix",
 	"releasenote": "First haxelib release.",
 	"version": "0.0.0",
 	"url": "http://github.com/back2dos/travis/",

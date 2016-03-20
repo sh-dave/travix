@@ -1,6 +1,6 @@
 package;
 
-import travis.Travis;
+import travix.Travix;
 
 class Run {
 

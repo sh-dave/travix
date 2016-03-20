@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+
+language: haxe
+
+haxe:
+  - "3.2.1"
+  - development
+  
+matrix:
+  allow_failures:
+    - haxe: development
+    
+install:
+  - haxelib git https://github.com/back2dos/travix
+  - haxelib run travix install
+
+script:
+${[for (p in platforms) "  - haxelib run travix "+p].join('\n')}
