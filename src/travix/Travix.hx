@@ -100,13 +100,11 @@ class Travix {
     return
       switch p.exitCode() {
         case 0:
-          trace(0);
           Success(switch p.stdout.readAll().toString() {
             case '': p.stderr.readAll().toString(); //some execs print to stderr
             case v: v;
           });
         case v:
-          trace(v);
           Failure(v, p.stderr.readAll().toString());
       }
   }
@@ -133,7 +131,7 @@ class Travix {
   function installLib(lib:String) {
     
     if (tryToRun('haxelib', ['path', lib]).match(Failure(_, _)))
-      run('haxelib', ['install', lib, '--always']);
+      exec('haxelib', ['install', lib, '--always']);
       
   }
   
@@ -175,8 +173,8 @@ class Travix {
   
   function build(args:Array<String>) {
     
-    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
-    //run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    //exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
     
   }
   
@@ -247,7 +245,11 @@ class Travix {
   
   function doCs() {
     
-    //TODO: install mono
+    if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
+      run('sudo', ['apt-get', 'mono-devel']);
+      run('sudo', ['apt-get', 'mono-mcs']);
+    }
+      
     var main = getMainClass();
     
     installLib('hxcs');
