@@ -97,15 +97,16 @@ class Travix {
   
   function tryToRun(cmd:String, ?params:Array<String>) {
     var p = new Process(cmd, params);
-    trace(p.exitCode());
     return
       switch p.exitCode() {
         case 0:
+          trace(0);
           Success(switch p.stdout.readAll().toString() {
             case '': p.stderr.readAll().toString(); //some execs print to stderr
             case v: v;
           });
         case v:
+          trace(v);
           Failure(v, p.stderr.readAll().toString());
       }
   }
