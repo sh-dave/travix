@@ -1,7 +1,5 @@
 package;
 
-import travix.Travix;
-
 class Run {
 
   static function main() {

@@ -96,6 +96,10 @@ class Travix {
   }
   
   function tryToRun(cmd:String, ?params:Array<String>) {
+    var a = [cmd];
+    if (params != null)
+      a = a.concat(params);
+      
     var p = new Process(cmd, params);
     return
       switch p.exitCode() {
@@ -110,15 +114,14 @@ class Travix {
   }
   
   function run(cmd:String, ?params:Array<String>) {
+    print('> ${a.join(" ")} ...');
     return
       switch tryToRun(cmd, params) {
-        case Success(v): v;
+        case Success(v): 
+          println(' done');
+          v;
         case Failure(code, out):
-          var a = [cmd];
-          if (params != null)
-            a = a.concat(params);
-            
-          println('Failed to run `${params.join(" ")}`');
+          println(' failure');
           print(out);
           exit(code);
           throw 'unreachable';
@@ -170,7 +173,8 @@ class Travix {
   
   function build(args:Array<String>) {
     
-    run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    //run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
     
   }
   
