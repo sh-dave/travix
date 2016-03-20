@@ -96,10 +96,6 @@ class Travix {
   }
   
   function tryToRun(cmd:String, ?params:Array<String>) {
-    var a = [cmd];
-    if (params != null)
-      a = a.concat(params);
-      
     var p = new Process(cmd, params);
     return
       switch p.exitCode() {
@@ -114,6 +110,10 @@ class Travix {
   }
   
   function run(cmd:String, ?params:Array<String>) {
+    var a = [cmd];
+    if (params != null)
+      a = a.concat(params);
+      
     print('> ${a.join(" ")} ...');
     return
       switch tryToRun(cmd, params) {
