@@ -1,9 +1,10 @@
 {
+	"main": "travix.Travix",
 	"name": "travix",
 	"license": "MIT",
 	"tags": [
 		"ci",
-    "travis",
+		"travis",
 		"build",
 		"tool"
 	],
@@ -12,10 +13,8 @@
 	"contributors": [
 		"back2dos"
 	],
-  "main": "travix.Travix",
-	"releasenote": "First haxelib release.",
+	"releasenote": "Initial release.",
 	"version": "0.0.0",
 	"url": "http://github.com/back2dos/travix/",
-	"dependencies": {
-	}
+	"dependencies": {}
 }
