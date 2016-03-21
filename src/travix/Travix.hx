@@ -215,8 +215,8 @@ class Travix {
   
   function build(args:Array<String>) {
     
-    //exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
-    run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+    //run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
     
   }
   
