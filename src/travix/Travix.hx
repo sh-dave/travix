@@ -23,10 +23,14 @@ enum RunResult {
 }
 
 class Travix {
+  static inline var PROFILE = 'https://travis-ci.org/profile/';
   static inline var TESTS = 'tests.hxml';
+  
   static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, java';
   static inline var ALL = 'interp,neko,python,java,node,flash,cs,cpp';
+  
   static inline var TRAVIS_CONFIG = '.travis.yml';
+  static inline var HAXELIB_CONFIG = 'haxelib.json';
   
   function new() { }
   
@@ -37,6 +41,7 @@ class Travix {
       case v: v;
     }
   }
+  
   function ask(question:String) {
     while (true) {
       print('$question (y/n)? ');
@@ -66,11 +71,30 @@ class Travix {
     
     TRAVIS_CONFIG.saveContent(defaultFile());
   }
-      
+  
+  function makeJson() {
+    if (HAXELIB_CONFIG.exists()) return;
+    
+    function defaultClassPath() {
+      for (option in 'src,hx'.split(','))
+        if (option.exists()) return './$option';
+      return '.';
+    }
+    
+    var infos:Infos = {
+      name: enter('library name', Sys.getCwd().removeTrailingSlashes().withoutDirectory()),
+      classPath: enter('classpath', defaultClassPath()),
+      dependencies: {}
+    }
+    
+    HAXELIB_CONFIG.saveContent(Json.stringify(infos, '  '));
+  }
+  
   function doInit() {
     
     makeYml();
-      
+    makeJson();
+    
     if (!TESTS.exists()) {
       println('no $TESTS found');
       
@@ -89,6 +113,18 @@ class Travix {
         '-cp $cp',
         '-main $main',
       ].join('\n'));
+      
+      if (ask('Activate CI for this project now'))      
+        switch Sys.systemName() {
+          case 'Windows':
+            exec('start', [PROFILE]);
+          case 'Linux':
+            exec('xdg-open', [PROFILE]);
+          case 'Mac':
+            exec('open', [PROFILE]);
+          default:
+            println('Unknown OS. Please go to $PROFILE');
+        }
     }
   }
   
@@ -164,7 +200,7 @@ class Travix {
   }
   
   function getInfos():Infos
-    return haxe.Json.parse(File.getContent('haxelib.json'));
+    return haxe.Json.parse(File.getContent(HAXELIB_CONFIG));
   
   function classPath()
     return switch getInfos().classPath {
@@ -293,6 +329,8 @@ class Travix {
     println('  node - run tests on nodejs (with hxnodejs)');
     println('  php - run tests on php');
     println('  java - run tests on java');
+    println('  flash - compiles tests on flash');
+    println('  python - run tests on python');
     println('  cs - run tests on cs');
     println('  cpp - run tests on cpp');
   }
