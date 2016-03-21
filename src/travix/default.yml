@@ -14,7 +14,6 @@ matrix:
 install:
   - haxelib install travix
   - haxelib run travix install
-  - haxelib install tests.hxml --always
 
 script:
 ${[for (p in platforms) "  - haxelib run travix "+p].join('\n')}
