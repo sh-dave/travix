@@ -165,10 +165,15 @@ class Travix {
       }
   }
   
-  function installLib(lib:String) {
+  function installLib(lib:String, ?version = '') {
     
     if (tryToRun('haxelib', ['path', lib]).match(Failure(_, _)))
-      exec('haxelib', ['install', lib, '--always']);
+      switch version {
+        case null | '':
+          exec('haxelib', ['install', lib, '--always']);
+        default:
+          exec('haxelib', ['install', lib, version, '--always']);
+      }
       
   }
   
@@ -192,7 +197,7 @@ class Travix {
       case v:
         
         for (lib in v.keys())
-          run('haxelib', ['install', lib, v[lib], '--always']);
+          installLib(lib, v[lib]);
     }
     run('haxelib', ['install', TESTS, '--always']);  
     
