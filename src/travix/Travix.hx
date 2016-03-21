@@ -180,7 +180,7 @@ class Travix {
   }
   
   function aptGet(pckge:String, ?args:Array<String>) 
-    exec('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
+    run('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
       
   function exec(cmd, ?args) 
     switch command(cmd, args) {
@@ -257,7 +257,7 @@ class Travix {
     
     build(['-cs', 'bin/cs/']);
     
-    exec('mono', ['bin/cs/$main.exe']);
+    exec('mono', ['bin/cs/bin/$main.exe']);
   }
   
     
