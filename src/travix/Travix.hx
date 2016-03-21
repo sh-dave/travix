@@ -27,7 +27,7 @@ class Travix {
   static inline var TESTS = 'tests.hxml';
   
   static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, java';
-  static inline var ALL = 'interp,neko,python,java,node,flash,cs,cpp';
+  static inline var ALL = 'interp,neko,python,node,flash,java,cpp,cs,php';
   
   static inline var TRAVIS_CONFIG = '.travis.yml';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
