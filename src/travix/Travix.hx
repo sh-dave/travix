@@ -313,7 +313,7 @@ class Travix {
   }
   
   function doFlash() {
-    build(['-python', 'bin/swf/tests.swf']);
+    build(['-swf', 'bin/swf/tests.swf']);
   }
   
   function doNode() {
