@@ -13,8 +13,8 @@
 	"contributors": [
 		"back2dos"
 	],
-	"releasenote": "Initial release.",
-	"version": "0.0.0",
+	"releasenote": "Include php in all.",
+	"version": "0.0.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
