@@ -180,7 +180,7 @@ class Travix {
   }
   
   function aptGet(pckge:String, ?args:Array<String>) 
-    run('sudo', ['apt-get', 'install', pckge].concat(if (args == null) [] else args));
+    exec('sudo', ['-qq', 'apt-get', 'install', pckge].concat(if (args == null) [] else args));
       
   function exec(cmd, ?args) 
     switch command(cmd, args) {
@@ -213,7 +213,7 @@ class Travix {
     build(['-php', 'bin/php']);
     
     if (tryToRun('php', ['--version']).match(Failure(_, _)))
-      aptGet('php5', ['-y']);
+      aptGet('php5');
       
     exec('php', ['bin/php/index.php']);
   }
@@ -247,8 +247,8 @@ class Travix {
   function doCs() {
     
     if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
-      aptGet('mono-devel', ['-y']);
-      aptGet('mono-mcs', ['-y']);
+      aptGet('mono-devel');
+      aptGet('mono-mcs');
     }
       
     var main = getMainClass();
