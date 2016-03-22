@@ -303,6 +303,10 @@ class Travix {
     var main = getMainClass();
     
     if (Sys.getEnv('TRAVIS_HAXE_VERSION') == 'development') {
+      
+      aptGet('gcc-multilib');
+      aptGet('g++-multilib'); 
+      
       if (!libInstalled('hxcpp')) {
         exec('haxelib', ['git', 'hxcpp', 'https://github.com/HaxeFoundation/hxcpp.git']);
         withCwd(run('haxelib', ['path', 'hxcpp']).split('\n')[0], buildHxcpp);
