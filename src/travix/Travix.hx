@@ -234,11 +234,16 @@ class Travix {
     }  
   }
       
-  function exec(cmd, ?args) 
+  function exec(cmd, ?args) {
+    var a = [cmd];
+    if (args != null)
+      a = a.concat(args);
+    println('> ' + a.join(' '));
     switch command(cmd, args) {
       case 0: 
       case v: exit(v);
     }
+  }
   
   function getMainClass() {
     
