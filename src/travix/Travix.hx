@@ -132,9 +132,9 @@ class Travix {
     return MacroStringTools.formatString(File.getContent(Context.getPosInfos((macro null).pos).file.directory() + '/default.yml'), Context.currentPos());
   }
   
-  function tryToRun(cmd:String, ?params:Array<String>) {
-    var p = new Process(cmd, params);
-    return
+  function tryToRun(cmd:String, ?params:Array<String>) 
+    return try {
+      var p = new Process(cmd, params);
       switch p.exitCode() {
         case 0:
           Success(switch p.stdout.readAll().toString() {
@@ -144,7 +144,9 @@ class Travix {
         case v:
           Failure(v, p.stderr.readAll().toString());
       }
-  }
+    } catch (e:Dynamic) {
+      Failure(404, 'Unknown command $cmd'); 
+    }
   
   function run(cmd:String, ?params:Array<String>) {
     var a = [cmd];
@@ -220,8 +222,9 @@ class Travix {
     
   }
   
-  function aptGet(pckge:String, ?args:Array<String>) 
+  function aptGet(pckge:String, ?args:Array<String>) {
     exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
+  }
       
   function exec(cmd, ?args) 
     switch command(cmd, args) {
