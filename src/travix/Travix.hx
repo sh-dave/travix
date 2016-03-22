@@ -167,9 +167,12 @@ class Travix {
       }
   }
   
+  function libInstalled(lib:String) 
+    return tryToRun('haxelib', ['path', lib]).match(Success(_));
+  
   function installLib(lib:String, ?version = '') {
     
-    if (tryToRun('haxelib', ['path', lib]).match(Failure(_, _)))
+    if (!libInstalled(lib))
       switch version {
         case null | '':
           exec('haxelib', ['install', lib, '--always']);
@@ -223,7 +226,12 @@ class Travix {
   }
   
   function aptGet(pckge:String, ?args:Array<String>) {
-    exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
+    switch Sys.systemName() {
+      case 'Linux':
+        exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
+      case v:
+        println('Cannot run apt-get on $v');
+    }  
   }
       
   function exec(cmd, ?args) 
@@ -277,23 +285,46 @@ class Travix {
     exec('java', ['-jar', 'bin/java/$main.jar']);
   }
   
+  function withCwd<T>(dir:String, f:Void->T) {
+    var old = getCwd();
+    setCwd(dir);
+    var ret = f();
+    setCwd(old);
+    return ret;
+  }
+  
   function doCpp() {
     
     var main = getMainClass();
     
-    installLib('hxcpp');
+    if (Sys.getEnv('TRAVIS_HAXE_VERSION') == 'development') {
+      if (!libInstalled('hxcpp')) {
+        exec('haxelib', ['git', 'hxcpp', 'https://github.com/HaxeFoundation/hxcpp.git']);
+        withCwd(run('haxelib', ['path', 'hxcpp']).split('\n')[0], buildHxcpp);
+      }      
+    }
+    else installLib('hxcpp');
     
     build(['-cpp', 'bin/cpp']);
     
     exec('./bin/cpp/$main');
   }
   
+  function buildHxcpp() {
+    withCwd('tools/hxcpp', exec.bind('haxe', ['compile.hxml']));
+    withCwd('project', exec.bind('neko', ['build.n']));
+    
+  }
+  
   function doCs() {
     
-    if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
-      aptGet('mono-devel');
-      aptGet('mono-mcs');
-    }
+    var isWindows = Sys.systemName() == 'Windows';
+    
+    if (!isWindows)
+      if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
+        aptGet('mono-devel');
+        aptGet('mono-mcs');
+      }
       
     var main = getMainClass();
     
@@ -301,7 +332,10 @@ class Travix {
     
     build(['-cs', 'bin/cs/']);
     
-    exec('mono', ['bin/cs/bin/$main.exe']);
+    if (isWindows)
+      exec('bin/cs/bin/$main.exe'.replace('/', '\\'));
+    else
+      exec('mono', ['bin/cs/bin/$main.exe']);
   }
   
     
