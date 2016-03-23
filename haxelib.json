@@ -13,8 +13,8 @@
 	"contributors": [
 		"back2dos"
 	],
-	"releasenote": "Full output in builds.",
-	"version": "0.0.3",
+	"releasenote": "Use dev version of hxcpp for dev version of haxe.",
+	"version": "0.1.0",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
