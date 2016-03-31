@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Use dev version of hxcpp for dev version of haxe.",
-	"version": "0.1.0",
+	"releasenote": "Add brew support",
+	"version": "0.2.0",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
