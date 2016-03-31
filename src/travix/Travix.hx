@@ -229,6 +229,8 @@ class Travix {
     switch Sys.systemName() {
       case 'Linux':
         exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
+      case 'Mac':
+        exec('brew', ['install', pckge].concat(if (args == null) [] else args));
       case v:
         println('Cannot run apt-get on $v');
     }  
@@ -331,8 +333,12 @@ class Travix {
     
     if (!isWindows)
       if (tryToRun('mono', ['--version']).match(Failure(_, _))) {
-        aptGet('mono-devel');
-        aptGet('mono-mcs');
+        if(Sys.systemName() == 'Linux') {
+          aptGet('mono-devel');
+          aptGet('mono-mcs');
+        } else {
+          aptGet('mono');
+        }
       }
       
     var main = getMainClass();
@@ -354,6 +360,9 @@ class Travix {
   }
   
   function doPython() {
+    if (tryToRun('python3', ['--version']).match(Failure(_, _)))
+      aptGet('python3');
+    
     build(['-python', 'bin/python/tests.py']);
     exec('python3', ['bin/python/tests.py']);
   }
