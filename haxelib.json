@@ -11,7 +11,8 @@
 	"classPath": "src",
 	"description": "Travis helper for Haxe",
 	"contributors": [
-		"back2dos"
+		"back2dos",
+		"kevinresol"
 	],
 	"releasenote": "Use dev version of hxcpp for dev version of haxe.",
 	"version": "0.1.0",
