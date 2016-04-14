@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Add missing command.",
-	"version": "0.3.1",
+	"releasenote": "Unbreak the build.",
+	"version": "0.3.2",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
