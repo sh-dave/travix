@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Add brew support",
-	"version": "0.2.0",
+	"releasenote": "Allow passing haxe compiler args to builds.",
+	"version": "0.3.0",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
