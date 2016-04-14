@@ -32,7 +32,10 @@ class Travix {
   static inline var TRAVIS_CONFIG = '.travis.yml';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
-  function new() { }
+  var args:Array<String>;
+  function new(args) { 
+    this.args = args;
+  }
   
   function enter(what:String, def:String) {
     println('Please specify $what (default: $def):');
@@ -217,11 +220,11 @@ class Travix {
       case null: '.';
       case v: v;
     }    
-  
-  function build(args:Array<String>) {
     
-    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
-    //run('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args));
+  function build(args:Array<String>, run) {
+    
+    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args).concat(this.args));
+    run();
     
   }
   
@@ -269,16 +272,17 @@ class Travix {
   }
   
   function doPhp() {
-    build(['-php', 'bin/php']);
+    build(['-php', 'bin/php'], function () {
     
-    if (tryToRun('php', ['--version']).match(Failure(_, _)))
-      aptGet('php5');
-      
-    exec('php', ['bin/php/index.php']);
+      if (tryToRun('php', ['--version']).match(Failure(_, _)))
+        aptGet('php5');
+        
+      exec('php', ['bin/php/index.php']);
+    });
   }
   
   function doInterp() {
-    build(['--interp']);
+    build(['--interp'], function () {});
   }
   
   function doJava() {
@@ -287,9 +291,9 @@ class Travix {
     
     installLib('hxjava');
     
-    build(['-java', 'bin/java']);
-    
-    exec('java', ['-jar', 'bin/java/$main.jar']);
+    build(['-java', 'bin/java'], function () {
+      exec('java', ['-jar', 'bin/java/$main.jar']);
+    });
   }
   
   function withCwd<T>(dir:String, f:Void->T) {
@@ -316,15 +320,14 @@ class Travix {
     }
     else installLib('hxcpp');
     
-    build(['-cpp', 'bin/cpp']);
-    
-    exec('./bin/cpp/$main');
+    build(['-cpp', 'bin/cpp'], function () {
+      exec('./bin/cpp/$main');
+    });
   }
   
   function buildHxcpp() {
     withCwd('tools/hxcpp', exec.bind('haxe', ['compile.hxml']));
     withCwd('project', exec.bind('neko', ['build.n']));
-    
   }
   
   function doCs() {
@@ -345,38 +348,41 @@ class Travix {
     
     installLib('hxcs');
     
-    build(['-cs', 'bin/cs/']);
+    build(['-cs', 'bin/cs/'], function () {
     
-    if (isWindows)
-      exec('bin/cs/bin/$main.exe'.replace('/', '\\'));
-    else
-      exec('mono', ['bin/cs/bin/$main.exe']);
+      if (isWindows)
+        exec('bin/cs/bin/$main.exe'.replace('/', '\\'));
+      else
+        exec('mono', ['bin/cs/bin/$main.exe']);
+    });
   }
   
     
   function doNeko() {
-    build(['-neko', 'bin/neko/tests.n']);
-    exec('neko', ['bin/neko/tests.n']);
+    build(['-neko', 'bin/neko/tests.n'], function () {
+      exec('neko', ['bin/neko/tests.n']);
+    });
   }
   
   function doPython() {
-    if (tryToRun('python3', ['--version']).match(Failure(_, _)))
-      aptGet('python3');
-    
-    build(['-python', 'bin/python/tests.py']);
-    exec('python3', ['bin/python/tests.py']);
+    build(['-python', 'bin/python/tests.py'], function () {
+      if (tryToRun('python3', ['--version']).match(Failure(_, _)))
+        aptGet('python3');
+      exec('python3', ['bin/python/tests.py']);      
+    });
   }
   
   function doFlash() {
-    build(['-swf', 'bin/swf/tests.swf']);
+    build(['-swf', 'bin/swf/tests.swf'], function () {});
   }
   
   function doNode() {
     
     installLib('hxnodejs');
     
-    build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs']);
-    exec('node', ['bin/node/tests.js']);    
+    build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs'], function () {
+      exec('node', ['bin/node/tests.js']);    
+    });
   }  
   
   function doHelp() {
@@ -403,28 +409,21 @@ class Travix {
       Sys.setCwd(args.pop());
     #end
     
-    var url = 
-      switch args.shift() {
-        case null: 'help';
-        case v: v;
-      }
-      
-    var params = new Map(),
-        value = '';
-    
-    for (a in args) {
-      
-      if (a.startsWith('-')) {
-        params[a.substr(1)] = value;
-        value = '';
-      }
-      else value = a;
-      
+    var cmd = args.shift();
+    var t = new Travix(args);
+    switch cmd {
+      case null | 'help': t.doHelp();
+      case 'init': t.doInit();
+      case 'interp': t.doInterp();
+      case 'neko': t.doNeko();
+      case 'node': t.doNode();
+      case 'java': t.doJava();
+      case 'flash': t.doFlash();
+      case 'cpp': t.doCpp();
+      case 'php': t.doPhp();
+      case 'python': t.doPython();
+      case 'cs': t.doCs();
     }
-    
-    var t = new Travix();
-    
-    haxe.web.Dispatch.run(url, params, t);
   }
   
 }
