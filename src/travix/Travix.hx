@@ -185,7 +185,7 @@ class Travix {
       
   }
   
-  function die(message:String, ?code = 500):Dynamic {
+  static function die(message:String, ?code = 500):Dynamic {
     println(message);
     exit(code);
     return null;
