@@ -413,6 +413,7 @@ class Travix {
     var t = new Travix(args);
     switch cmd {
       case null | 'help': t.doHelp();
+      case 'install': t.doInstall();
       case 'init': t.doInit();
       case 'interp': t.doInterp();
       case 'neko': t.doNeko();
@@ -423,6 +424,8 @@ class Travix {
       case 'php': t.doPhp();
       case 'python': t.doPython();
       case 'cs': t.doCs();
+      case v:
+        die('Unknown command $v');
     }
   }
   
