@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Allow passing haxe compiler args to builds.",
-	"version": "0.3.0",
+	"releasenote": "Add missing command.",
+	"version": "0.3.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
