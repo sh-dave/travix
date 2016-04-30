@@ -379,7 +379,11 @@ class Travix {
   }
   
   function doNode() {
-    
+    if (Sys.systemName() == 'Mac') {
+        // TODO: remove this when travis decided to update their stock node version
+        exec('brew', ['update']);
+        exec('brew', ['upgrade', 'node']);
+    }
     installLib('hxnodejs');
     
     build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs'], function () {
