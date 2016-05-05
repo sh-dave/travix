@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Unbreak the build.",
-	"version": "0.3.2",
+	"releasenote": "Various mac fixes.",
+	"version": "0.3.3",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
