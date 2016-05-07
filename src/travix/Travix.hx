@@ -257,11 +257,15 @@ class Travix {
     }
   }
   
-  function startFold(tag:String)
-    Sys.println('travis_fold:start:$tag');
+  function startFold(tag:String) {
+      tag = tag.replace('+', 'plus');
+      Sys.println('travis_fold:start:$tag');
+  }
     
-  function endFold(tag:String)
-    Sys.println('travis_fold:end:$tag');
+  function endFold(tag:String) {
+      tag = tag.replace('+', 'plus');
+      Sys.println('travis_fold:end:$tag');
+  }
   
   function getMainClass() {
     
@@ -329,8 +333,10 @@ class Travix {
       }
       
       if (!libInstalled('hxcpp')) {
+        startFold('git-hxcpp');
         exec('haxelib', ['git', 'hxcpp', 'https://github.com/HaxeFoundation/hxcpp.git']);
         withCwd(run('haxelib', ['path', 'hxcpp']).split('\n')[0], buildHxcpp);
+        endFold('git-hxcpp');
       }      
     }
     else installLib('hxcpp');
@@ -394,8 +400,10 @@ class Travix {
   function doNode() {
     if (Sys.systemName() == 'Mac') {
         // TODO: remove this when travis decided to update their stock node version
+        startFold('upgrade-nodejs');
         exec('brew', ['update']);
         exec('brew', ['upgrade', 'node']);
+        endFold('upgrade-nodejs');
     }
     installLib('hxnodejs');
     
