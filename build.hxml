@@ -1,0 +1,3 @@
+-cp src
+-main travix.Travix
+-neko run.n

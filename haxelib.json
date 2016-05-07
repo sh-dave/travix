@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Various mac fixes.",
-	"version": "0.3.3",
+	"releasenote": "Fold outputs.",
+	"version": "0.3.4",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }

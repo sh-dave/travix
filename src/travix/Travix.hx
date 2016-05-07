@@ -32,8 +32,10 @@ class Travix {
   static inline var TRAVIS_CONFIG = '.travis.yml';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
+  var cmd:String;
   var args:Array<String>;
-  function new(args) { 
+  function new(cmd, args) { 
+    this.cmd = cmd;
     this.args = args;
   }
   
@@ -175,6 +177,7 @@ class Travix {
   
   function installLib(lib:String, ?version = '') {
     
+    startFold('installLib-$lib');
     if (!libInstalled(lib))
       switch version {
         case null | '':
@@ -182,7 +185,7 @@ class Travix {
         default:
           exec('haxelib', ['install', lib, version, '--always']);
       }
-      
+    endFold('installLib-$lib');
   }
   
   static function die(message:String, ?code = 500):Dynamic {
@@ -222,13 +225,16 @@ class Travix {
     }    
     
   function build(args:Array<String>, run) {
-    
+      
+    startFold('build-$cmd');
     exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args).concat(this.args));
+    endFold('build-$cmd');
     run();
     
   }
   
   function aptGet(pckge:String, ?args:Array<String>) {
+    startFold('aptGet-$pckge');
     switch Sys.systemName() {
       case 'Linux':
         exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
@@ -237,6 +243,7 @@ class Travix {
       case v:
         println('Cannot run apt-get on $v');
     }  
+    endFold('aptGet-$pckge');
   }
       
   function exec(cmd, ?args) {
@@ -249,6 +256,12 @@ class Travix {
       case v: exit(v);
     }
   }
+  
+  function startFold(tag:String)
+    Sys.println('travis_fold:start:$tag');
+    
+  function endFold(tag:String)
+    Sys.println('travis_fold:end:$tag');
   
   function getMainClass() {
     
@@ -416,7 +429,7 @@ class Travix {
     #end
     
     var cmd = args.shift();
-    var t = new Travix(args);
+    var t = new Travix(cmd, args);
     switch cmd {
       case null | 'help': t.doHelp();
       case 'install': t.doInstall();
