@@ -32,6 +32,8 @@ class Travix {
   static inline var TRAVIS_CONFIG = '.travis.yml';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
+  static var isTravis = Sys.getEnv('TRAVIS') == 'true';
+  
   var cmd:String;
   var args:Array<String>;
   function new(cmd, args) { 
@@ -398,7 +400,7 @@ class Travix {
   }
   
   function doNode() {
-    if (Sys.systemName() == 'Mac') {
+    if (isTravis && Sys.systemName() == 'Mac') {
         // TODO: remove this when travis decided to update their stock node version
         startFold('upgrade-nodejs');
         exec('brew', ['update']);
