@@ -39,3 +39,11 @@ Apart from helping the pathologically lazy to set up a CI, the strength of `trav
 ## Reasons to not use travix
 
 The motivation behind `travix` is to be able to spin up CI setups quickly, for many small libraries (in my case the `tink` libs). It is very likely, that it will not scale up to bigger projects, particularly when multiple builds need to be run in unison to have a test. If you have suggestions - or better yet: pull requests - to make `travix` more useful for such cases, you are highly welcome.
+
+## How to use git version
+
+In your `.travis.yml` replace `haxelib install travix` with the following:
+
+```
+haxelib git travix https://github.com/back2dos/travix && pushd "$(haxelib path travix | head -n 1)/../" && haxe build.hxml && popd
+```
