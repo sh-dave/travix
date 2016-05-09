@@ -260,11 +260,13 @@ class Travix {
   }
   
   function startFold(tag:String) {
+      if(!isTravis) return;
       tag = tag.replace('+', 'plus');
       Sys.println('travis_fold:start:$tag');
   }
     
   function endFold(tag:String) {
+      if(!isTravis) return;
       tag = tag.replace('+', 'plus');
       Sys.println('travis_fold:end:$tag');
   }
