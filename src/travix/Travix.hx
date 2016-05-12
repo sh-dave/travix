@@ -32,7 +32,10 @@ class Travix {
   static inline var TRAVIS_CONFIG = '.travis.yml';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
+  static inline var TRAVIX_COUNTER = '.travix_counter';
+  
   static var isTravis = Sys.getEnv('TRAVIS') == 'true';
+  static var counter = 0;
   
   var cmd:String;
   var args:Array<String>;
@@ -262,13 +265,13 @@ class Travix {
   function startFold(tag:String) {
       if(!isTravis) return;
       tag = tag.replace('+', 'plus');
-      Sys.println('travis_fold:start:$tag');
+      Sys.println('travis_fold:start:$tag.$counter');
   }
     
   function endFold(tag:String) {
       if(!isTravis) return;
       tag = tag.replace('+', 'plus');
-      Sys.println('travis_fold:end:$tag');
+      Sys.println('travis_fold:end:$tag.$counter');
   }
   
   function getMainClass() {
@@ -434,6 +437,8 @@ class Travix {
   
   static function main() {
     
+    incrementCounter();
+    
     var args = Sys.args();
     
     #if interp
@@ -459,6 +464,12 @@ class Travix {
         die('Unknown command $v');
     }
   }
+  
+  static function incrementCounter()
+    if(isTravis) {
+      counter = TRAVIX_COUNTER.exists() ? Std.parseInt(TRAVIX_COUNTER.getContent()) : 0;
+      TRAVIX_COUNTER.saveContent(Std.string(++counter));
+    }
   
 }
 
