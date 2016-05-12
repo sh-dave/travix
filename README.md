@@ -42,8 +42,8 @@ The motivation behind `travix` is to be able to spin up CI setups quickly, for m
 
 ## How to use git version
 
-In your `.travis.yml` replace `haxelib install travix` with the following:
+In your `.travis.yml` simply replace `haxelib install travix` with the following:
 
 ```
-haxelib git travix https://github.com/back2dos/travix && pushd "$(haxelib path travix | head -n 1)/../" && haxe build.hxml && popd
+haxelib git travix https://github.com/back2dos/travix
 ```
