@@ -468,7 +468,7 @@ class Travix {
   static function incrementCounter()
     if(isTravis) {
       counter = TRAVIX_COUNTER.exists() ? Std.parseInt(TRAVIX_COUNTER.getContent()) : 0;
-      TRAVIX_COUNTER.saveContent(Std.string(++counter));
+      TRAVIX_COUNTER.saveContent(Std.string(counter+1));
     }
   
 }

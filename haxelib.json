@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Fold outputs.",
-	"version": "0.3.5",
+	"releasenote": "Use counter to avoid duplicate folding tags",
+	"version": "0.3.6",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
