@@ -416,9 +416,11 @@ class Travix {
     
     build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs'], function () {
       if('bin/node/package.json'.exists()) {
+        startFold('npm-install');
         Sys.setCwd('bin/node');
         exec('npm', ['install']);
         Sys.setCwd('../..');
+        endFold('npm-install');
       }
       exec('node', ['bin/node/tests.js']);
     });
