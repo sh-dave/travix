@@ -488,7 +488,7 @@ class Travix {
   }  
   
   function doHelp() {
-    println('Commands.............');
+    println('Commands');
     println('  ');
     println('  init - initializes a project with a .travis.yml');
     println('  install - installs dependencies');
