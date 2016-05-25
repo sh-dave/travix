@@ -403,7 +403,7 @@ class Travix {
   function doFlash() {
     var flashPath = switch Sys.systemName() {
       case 'Linux': '~/.macromedia/Flash_Player';
-      case 'Mac': '~/Library/Preferences/Macromedia/Flash Player';
+      case 'Mac': '~/Library/Preferences/Macromedia/Flash\\ Player';
       case _: null;
     }
 
