@@ -401,7 +401,68 @@ class Travix {
   }
   
   function doFlash() {
-    build(['-swf', 'bin/swf/tests.swf'], function () {});
+    var flashPath = switch Sys.systemName() {
+      case 'Linux': '~/.macromedia/Flash_Player';
+      case 'Mac': '~/Library/Preferences/Macromedia/Flash Player';
+      case _: null;
+    }
+
+    if(flashPath == null) {
+      build(['-swf', 'bin/swf/tests.swf'], function () {});
+      return;
+    }
+
+    startFold('flash-install');
+    // Some xvfb settings
+    exec('export', ['DISPLAY=:99.0']);
+    exec('export', ['AUDIODEV=null']);
+
+    // Create a configuration file so the trace log is enabled
+    exec('echo', ['-e', '"ErrorReportingEnable=1\nTraceOutputFileEnable=1"', '>', '~/mm.cfg']);
+
+    // Add the current directory as trusted, so exit can be used.
+    exec('mkdir', ['-p', '$flashPath/#Security/FlashPlayerTrust']);
+    exec('echo', ['"`pwd`"', '>', '$flashPath/#Security/FlashPlayerTrust/travix.cfg']);
+
+    // Download and unzip the player
+    exec('wget', ['-nv', 'http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz']);
+    exec('tar', ['-xf', 'flashplayer_11_sa_debug.i386.tar.gz', '-C', '~']);
+    exec('rm', ['-f', 'flashplayer_11_sa_debug.i386.tar.gz']);
+
+    // Required flash libs
+    var packages = ["libcurl3:i386","libglib2.0-0:i386","libx11-6:i386", "libxext6:i386","libxt6:i386",
+      "libxcursor1:i386","libnss3:i386", "libgtk2.0-0:i386"];
+
+    for(pack in packages) aptGet(pack);
+    endFold('flash-install');
+
+    build(['-swf', 'bin/swf/tests.swf'], function () {
+      startFold('flash-run');
+      // Create the logfile
+      exec('rm', ['-f', '$flashPath/Logs/flashlog.txt']);
+      exec('touch', ['$flashPath/Logs/flashlog.txt']);
+
+      // Must use eval to start tail in background, to get output
+      exec('eval', ['tail -f $flashPath/Logs/flashlog.txt &']);
+
+      // The flash player has some issues with unexplained crashes,
+      // but if it runs about 7 times, it should succeed one of those.
+      var ok = false;
+      for(i in 1 ... 8) {
+        if(command('xvfb-run', ['~/flashplayerdebugger', 'bin/swf/tests.swf']) == 0) {
+          ok = true; break;
+        }
+      }
+
+      // Kill the tail process
+      exec('eval', ["ps aux | grep -ie [L]ogs/flashlog.txt | awk '{print $2}' | xargs kill -9"]);
+      endFold('flash-run');
+
+      if(!ok) {
+        println('Flash execution failed 7 times, build failure.');
+        exit(1);
+      }
+    });
   }
   
   function doNode() {
@@ -427,7 +488,7 @@ class Travix {
   }  
   
   function doHelp() {
-    println('Commands');
+    println('Commands.............');
     println('  ');
     println('  init - initializes a project with a .travis.yml');
     println('  install - installs dependencies');
