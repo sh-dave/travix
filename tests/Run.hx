@@ -6,10 +6,10 @@ using buddy.Should;
 class Run extends buddy.SingleSuite {
   public function new() {
     describe("Using travix", {
-      #if sys
-      describe("On Sys targets", {
+      #if (sys || nodejs)
+      describe("On Sys targets and Node.js", {
         it("should compile and exit with status 0 if everything went well", {
-          true.should.be(true);
+          Sys.getCwd().should.not.be(null);
         });
       });
       #elseif flash
