@@ -22,12 +22,26 @@ Travix has individual commands for building:
 - node - run tests on nodejs (with hxnodejs)
 - php - run tests on php
 - java - run tests on java
-- flash - compiles tests on flash
+- flash - run tests on flash (see instructions below)
 - python - run tests on python
 - cs - run tests on cs
 - cpp - run tests on cpp
 
 So instead of having to have to define all kinds of builds and figuring out the right way to run them, this will do.
+
+### Building for flash
+
+Travix jumps through a couple of hoops to enable CI for flash. All you need to do however, is to use the following methods:
+
+```haxe
+// Redirect all trace calls:
+haxe.Log.trace = function(v, ?pos) flash.Lib.trace(v);
+
+// And exit with status 0 or 1 when tests are done:
+flash.system.System.exit(status);
+```
+
+If you use a testing library like [Buddy](https://github.com/ciscoheat/buddy), you don't even have to worry about that.
 
 ## Reasons to use travix
 
