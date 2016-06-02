@@ -418,16 +418,19 @@ class Travix {
     exec('export', ['AUDIODEV=null']);
 
     // Create a configuration file so the trace log is enabled
-    exec('echo', ['-e', '"ErrorReportingEnable=1\nTraceOutputFileEnable=1"', '>', '~/mm.cfg']);
+    exec('eval', ['echo "ErrorReportingEnable=1\\nTraceOutputFileEnable=1" > ~/mm.cfg']);
 
     // Add the current directory as trusted, so exit can be used.
     exec('eval', ['mkdir -p $flashPath/#Security/FlashPlayerTrust']);
+    exec('eval', ['mkdir -p $flashPath/Logs']);
     exec('eval', ['echo "`pwd`" > $flashPath/#Security/FlashPlayerTrust/travix.cfg']);
 
-    // Download and unzip the player
-    exec('wget', ['-nv', 'http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz']);
-    exec('tar', ['-xf', 'flashplayer_11_sa_debug.i386.tar.gz', '-C', '~']);
-    exec('rm', ['-f', 'flashplayer_11_sa_debug.i386.tar.gz']);
+    // Download and unzip the player, unless it exists already
+    if(command("test", ["-f", "~/flashplayerdebugger"]) != 0) {
+	    exec('wget', ['-nv', 'http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz']);
+	    exec('tar', ['-xf', 'flashplayer_11_sa_debug.i386.tar.gz', '-C', '~']);
+	    exec('rm', ['-f', 'flashplayer_11_sa_debug.i386.tar.gz']);
+	}
 
     // Required flash libs
     var packages = ["libcurl3:i386","libglib2.0-0:i386","libx11-6:i386", "libxext6:i386","libxt6:i386",
@@ -459,7 +462,7 @@ class Travix {
       endFold('flash-run');
 
       if(!ok) {
-        println('Flash execution failed 7 times, build failure.');
+        println('Flash execution failed too many times, build failure.');
         exit(1);
       }
     });
