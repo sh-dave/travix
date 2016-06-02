@@ -23,5 +23,5 @@ script:
   - haxelib run travix python
   - haxelib run travix java
   - haxelib run travix cs
-  - haxelib run travix cpp  
+  - haxelib run travix cpp -lib hxcpp
   - haxelib run travix flash -D flash-exit -D reporter=buddy.reporting.TraceReporter
