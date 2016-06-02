@@ -87,7 +87,7 @@ class Travix {
     
     function defaultClassPath() {
       for (option in 'src,hx'.split(','))
-        if (option.exists()) return './$option';
+        if (option.exists()) return '$option';
       return '.';
     }
     
@@ -108,7 +108,7 @@ class Travix {
     if (!TESTS.exists()) {
       println('no $TESTS found');
       
-      var cp = enter('class path for tests', './tests/');
+      var cp = enter('class path for tests', 'tests');
       var main = 'RunTests';
       
       for (m in 'Run,Main'.split(',')) 
