@@ -41,11 +41,7 @@ haxe.Log.trace = function(v, ?pos) flash.Lib.trace(v);
 flash.system.System.exit(status);
 ```
 
-The BDD library [Buddy](https://github.com/ciscoheat/buddy) has built-in support for flash, so if you're using Buddy you don't even have to worry about the above. Simply use this in the `.travis` file for flash:
-
-```
-haxelib run travix flash -D flash-exit -D reporter=buddy.reporting.TraceReporter
-```
+The BDD library [Buddy](https://github.com/ciscoheat/buddy) has built-in support for flash testing, so if you're using Buddy you don't even have to worry about the above.
 
 ## Reasons to use travix
 

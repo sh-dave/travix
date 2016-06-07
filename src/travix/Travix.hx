@@ -452,7 +452,7 @@ class Travix {
     exec('eval', ['tail -f --follow=name --retry $flashPath/Logs/flashlog.txt &']);
     endFold('flash-install');
 
-    build(['-swf', 'bin/swf/tests.swf'], function () {
+    build(['-swf', 'bin/swf/tests.swf', '-D', 'flash-exit'], function () {
       // The flash player has some issues with unexplained crashes,
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;
@@ -504,7 +504,7 @@ class Travix {
     println('  node - run tests on nodejs (with hxnodejs)');
     println('  php - run tests on php');
     println('  java - run tests on java');
-    println('  flash - compiles tests on flash');
+    println('  flash - run tests on flash');
     println('  python - run tests on python');
     println('  cs - run tests on cs');
     println('  cpp - run tests on cpp');
