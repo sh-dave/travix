@@ -39,10 +39,13 @@ class Travix {
   
   var cmd:String;
   var args:Array<String>;
+
   function new(cmd, args) { 
     this.cmd = cmd;
     this.args = args;
   }
+
+  ///// General functions ///////////////////////////////////////////////////////
   
   function enter(what:String, def:String) {
     println('Please specify $what (default: $def):');
@@ -66,6 +69,7 @@ class Travix {
     
     return throw 'unreachable';
   }
+
   function makeYml() {
     if (TRAVIS_CONFIG.exists() && !ask('The $TRAVIS_CONFIG is already present. Do you wish to replace it with a new one')) return;
     
@@ -81,7 +85,7 @@ class Travix {
     
     TRAVIS_CONFIG.saveContent(defaultFile());
   }
-  
+
   function makeJson() {
     if (HAXELIB_CONFIG.exists()) return;
     
@@ -138,10 +142,6 @@ class Travix {
     }
   }
   
-  macro static function defaultFile() {
-    return MacroStringTools.formatString(File.getContent(Context.getPosInfos((macro null).pos).file.directory() + '/default.yml'), Context.currentPos());
-  }
-  
   function tryToRun(cmd:String, ?params:Array<String>) 
     return try {
       var p = new Process(cmd, params);
@@ -193,12 +193,9 @@ class Travix {
     endFold('installLib-$lib');
   }
   
-  static function die(message:String, ?code = 500):Dynamic {
-    println(message);
-    exit(code);
-    return null;
-  }
-  
+  function getInfos():Infos
+    return haxe.Json.parse(File.getContent(HAXELIB_CONFIG));
+
   function doInstall() {
     
     if (!TESTS.exists())
@@ -219,9 +216,6 @@ class Travix {
     
     exec('haxelib', ['list']);
   }
-  
-  function getInfos():Infos
-    return haxe.Json.parse(File.getContent(HAXELIB_CONFIG));
   
   function classPath()
     return switch getInfos().classPath {
@@ -294,6 +288,16 @@ class Travix {
       default: die('no -main class found in $TESTS');
     }
   }
+
+  function withCwd<T>(dir:String, f:Void->T) {
+    var old = getCwd();
+    setCwd(dir);
+    var ret = f();
+    setCwd(old);
+    return ret;
+  }
+
+  ///// Build methods for each target //////////////////////////////////////////////////////
   
   function doPhp() {
     build(['-php', 'bin/php'], function () {
@@ -318,14 +322,6 @@ class Travix {
     build(['-java', 'bin/java'], function () {
       exec('java', ['-jar', 'bin/java/$main.jar']);
     });
-  }
-  
-  function withCwd<T>(dir:String, f:Void->T) {
-    var old = getCwd();
-    setCwd(dir);
-    var ret = f();
-    setCwd(old);
-    return ret;
   }
   
   function doCpp() {
@@ -384,7 +380,6 @@ class Travix {
         exec('mono', ['bin/cs/bin/$main.exe']);
     });
   }
-  
     
   function doNeko() {
     build(['-neko', 'bin/neko/tests.n'], function () {
@@ -401,11 +396,6 @@ class Travix {
   }
   
   function doFlash() {
-    var isTravis = {
-      var travis = Sys.getEnv("TRAVIS");
-      travis != null && travis.length > 0;
-    }
-
     var homePath = switch Sys.systemName() {
       // Run only on Linux, and Travis cannot use ~ as path
       case 'Linux': isTravis ? '/home/travis' : '~';
@@ -519,6 +509,8 @@ class Travix {
     println('  cs - run tests on cs');
     println('  cpp - run tests on cpp');
   }
+
+  ///// Static methods /////////////////////////////////////////////////////////////////////
   
   static function main() {
     
@@ -549,13 +541,22 @@ class Travix {
         die('Unknown command $v');
     }
   }
-  
+
   static function incrementCounter()
     if(isTravis) {
       counter = TRAVIX_COUNTER.exists() ? Std.parseInt(TRAVIX_COUNTER.getContent()) : 0;
       TRAVIX_COUNTER.saveContent(Std.string(counter+1));
     }
   
+  static function die(message:String, ?code = 500):Dynamic {
+    println(message);
+    exit(code);
+    return null;
+  }
+
+  macro static function defaultFile() {
+    return MacroStringTools.formatString(File.getContent(Context.getPosInfos((macro null).pos).file.directory() + '/default.yml'), Context.currentPos());
+  }  
 }
 
 private typedef Infos = { 
