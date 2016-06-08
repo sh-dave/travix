@@ -23,6 +23,7 @@ enum RunResult {
 }
 
 class Travix {
+  
   static inline var PROFILE = 'https://travis-ci.org/profile/';
   static inline var TESTS = 'tests.hxml';
   
@@ -47,13 +48,23 @@ class Travix {
 
   ///// General functions ///////////////////////////////////////////////////////
   
-  function enter(what:String, def:String) {
-    println('Please specify $what (default: $def):');
-    return switch Sys.stdin().readLine().trim() {
-      case '': def;
-      case v: v;
+  function enter(what:String, ?def:String) 
+    switch def {
+      case null:
+        println('Please specify $what');
+        while (true) {
+          switch Sys.stdin().readLine().trim() {
+            case '': 
+            case v: return v;
+          }
+        }
+      default:
+        println('Please specify $what (default: $def):');
+        return switch Sys.stdin().readLine().trim() {
+          case '': def;
+          case v: v;
+        }
     }
-  }
   
   function ask(question:String) {
     while (true) {
@@ -86,7 +97,7 @@ class Travix {
     TRAVIS_CONFIG.saveContent(defaultFile());
   }
 
-  function makeJson() {
+  function makeJson(source:ProjectSource) {
     if (HAXELIB_CONFIG.exists()) return;
     
     function defaultClassPath() {
@@ -98,7 +109,26 @@ class Travix {
     var infos:Infos = {
       name: enter('library name', Sys.getCwd().removeTrailingSlashes().withoutDirectory()),
       classPath: enter('classpath', defaultClassPath()),
-      dependencies: {}
+      dependencies: { },
+      contributors: [enter('User name', switch source {
+        case GitHub(user, _): user;
+        default: null;
+      })],
+      tags: [for (t in enter('Tags (comma separated)', '').split(','))
+        switch t.trim() {
+          case '': continue;
+          case v: v;
+        }
+      ],
+      version: '0.0.0',
+      license: 'MIT',
+      releasenote: 'initial release',
+    }
+    
+    switch source {
+      case GitHub(u, p):
+        infos.website = 'https://github.com/$u/$p/';
+      default:
     }
     
     HAXELIB_CONFIG.saveContent(Json.stringify(infos, '  '));
@@ -106,8 +136,33 @@ class Travix {
   
   function doInit() {
     
+    var source = Unknown;
+    {
+      var p = new Process('git', ['config', '--get', 'remote.origin.url']);
+      switch p.exitCode() {
+        case 0: 
+          var url = p.stdout.readAll().toString();
+          if (url.startsWith('https://github.com/')) {
+            var parts = url.split('/');
+            var user = parts[3],
+                project = parts[4].trim();
+                
+            if (project.endsWith('.git'))
+              project = project.substr(0, project.length - 4);
+              
+            source = GitHub(user, project);
+          }
+          else {
+            println('Git remote found, but does not seem to be on GitHub. Assuming plain Git');
+            source = Git(url);
+          }
+        default: 
+          println('No git installed. Cannot guess remote url.');
+      }
+    }
+    
     makeYml();
-    makeJson();
+    makeJson(source);
     
     if (!TESTS.exists()) {
       println('no $TESTS found');
@@ -128,16 +183,24 @@ class Travix {
         '-main $main',
       ].join('\n'));
       
+      var profile = PROFILE;
+      
+      switch source {
+        case GitHub(user, _):
+          profile += user;
+        default:
+      }
+      
       if (ask('Activate CI for this project now'))      
         switch Sys.systemName() {
           case 'Windows':
-            exec('start', [PROFILE]);
+            exec('start', [profile]);
           case 'Linux':
-            exec('xdg-open', [PROFILE]);
+            exec('xdg-open', [profile]);
           case 'Mac':
-            exec('open', [PROFILE]);
+            exec('open', [profile]);
           default:
-            println('Unknown OS. Please go to $PROFILE');
+            println('Unknown OS. Please go to $profile');
         }
     }
   }
@@ -562,5 +625,17 @@ class Travix {
 private typedef Infos = { 
   name: String, 
   ?dependencies:DynamicAccess<String>,
-  ?classPath: String,
+  ?classPath:String,
+  contributors:Array<String>,
+  ?website:String,
+  tags:Array<String>,
+  license:String,
+  version:String,
+  releasenote:String,
+}
+
+enum ProjectSource {
+  Unknown;
+  GitHub(user:String, project:String);
+  Git(url:String);
 }
