@@ -183,6 +183,25 @@ class Travix {
         '-main $main',
       ].join('\n'));
       
+      {
+        var mainFile = cp + '/' + main.replace('.', '/') + '.hx';
+        
+        if (!mainFile.exists()) {
+          println('Generating entrypoint in $mainFile');
+          try {
+            ensureDir(mainFile.normalize());
+            
+            var pack = main.split('.');
+            var name = pack.pop();
+            
+            mainFile.saveContent(defaultEntryPoint());
+          }
+          catch (e:Dynamic) {
+            println('Failed to generate entrypoint because $e');
+          }
+        }
+      }
+      
       var profile = PROFILE;
       
       switch source {
@@ -616,10 +635,33 @@ class Travix {
     exit(code);
     return null;
   }
-
+  
+  static function ensureDir(dir:String) {
+    var isDir = dir.extension() == '';
+    
+    if (isDir)
+      dir = dir.removeTrailingSlashes();
+      
+    var parent = dir.directory();
+    if (parent.removeTrailingSlashes() == dir) return;
+    if (!parent.exists())
+      ensureDir(parent);
+      
+    if (isDir && !dir.exists())
+      dir.createDirectory();
+  }
+  
   macro static function defaultFile() {
-    return MacroStringTools.formatString(File.getContent(Context.getPosInfos((macro null).pos).file.directory() + '/default.yml'), Context.currentPos());
+    return loadFile('default.yml');
   }  
+  macro static function defaultEntryPoint() {
+    return loadFile('default.hx');
+  }  
+  #if macro
+  static function loadFile(name:String) {
+    return MacroStringTools.formatString(File.getContent(Context.getPosInfos((macro null).pos).file.directory() + '/$name'), Context.currentPos());
+  }
+  #end
 }
 
 private typedef Infos = { 
