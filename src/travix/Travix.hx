@@ -127,7 +127,7 @@ class Travix {
     
     switch source {
       case GitHub(u, p):
-        infos.website = 'https://github.com/$u/$p/';
+        infos.url = 'https://github.com/$u/$p/';
       default:
     }
     
@@ -669,7 +669,7 @@ private typedef Infos = {
   ?dependencies:DynamicAccess<String>,
   ?classPath:String,
   contributors:Array<String>,
-  ?website:String,
+  ?url:String,
   tags:Array<String>,
   license:String,
   version:String,
