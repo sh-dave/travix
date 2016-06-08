@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Better flash integration, no need to specify extra compiler directives anymore. Fixes #21.",
-	"version": "0.4.1",
+	"releasenote": "Improved generation.",
+	"version": "0.5.0",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
