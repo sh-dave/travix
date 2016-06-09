@@ -479,8 +479,7 @@ class Travix {
   
   function doFlash() {
     var homePath = switch Sys.systemName() {
-      // Run only on Linux, and Travis cannot use ~ as path
-      case 'Linux': isTravis ? '/home/travis' : '~';
+      case 'Linux': "$HOME";
       case _: null;
     }
 
@@ -498,20 +497,20 @@ class Travix {
     exec('export', ['AUDIODEV=null']);
 
     // Create a configuration file so the trace log is enabled
-    exec('eval', ['echo "ErrorReportingEnable=1\\nTraceOutputFileEnable=1" > $homePath/mm.cfg']);
+    exec('eval', ['echo "ErrorReportingEnable=1\\nTraceOutputFileEnable=1" > "$homePath/mm.cfg"']);
 
     // Add the current directory as trusted, so exit can be used.
-    exec('eval', ['mkdir -m 777 -p $flashPath/#Security/FlashPlayerTrust']);
-    exec('eval', ['echo "`pwd`" > $flashPath/#Security/FlashPlayerTrust/travix.cfg']);
+    exec('eval', ['mkdir -m 777 -p "$flashPath/#Security/FlashPlayerTrust"']);
+    exec('eval', ['echo "`pwd`" > "$flashPath/#Security/FlashPlayerTrust/travix.cfg"']);
 
-    exec('eval', ['mkdir -m 777 -p $flashPath/Logs']);
-    exec('rm', ['-f', '$flashPath/Logs/flashlog.txt']);
-    exec('touch', ['$flashPath/Logs/flashlog.txt']);
+    exec('eval', ['mkdir -m 777 -p "$flashPath/Logs"']);
+    exec('eval', ['rm -f "$flashPath/Logs/flashlog.txt"']);
+    exec('eval', ['touch "$flashPath/Logs/flashlog.txt"']);
 
     // Download and unzip the player, unless it exists already
-    if(command("test", ["-f", '$flashPath/flashplayerdebugger']) != 0) {
+    if(command("eval", ['test -f "$flashPath/flashplayerdebugger"']) != 0) {
       exec('wget', ['-nv', 'http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz']);
-      exec('eval', ['tar -C $flashPath -xf flashplayer_11_sa_debug.i386.tar.gz --wildcards "flashplayerdebugger"']);
+      exec('eval', ['tar -C "$flashPath" -xf flashplayer_11_sa_debug.i386.tar.gz --wildcards "flashplayerdebugger"']);
       exec('rm', ['-f', 'flashplayer_11_sa_debug.i386.tar.gz']);
 
       // Installing 386 packages on Travis/trusty is a mess.
@@ -531,7 +530,7 @@ class Travix {
     }
     
     // Tail the logfile. Must use eval to start tail in background, to see the output.
-    exec('eval', ['tail -f --follow=name --retry $flashPath/Logs/flashlog.txt &']);
+    exec('eval', ['tail -f --follow=name --retry "$flashPath/Logs/flashlog.txt" &']);
     endFold('flash-install');
 
     build(['-swf', 'bin/swf/tests.swf', '-D', 'flash-exit'], function () {
@@ -539,7 +538,7 @@ class Travix {
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;
       for(i in 1 ... 8) {
-        if(command('xvfb-run', ['$flashPath/flashplayerdebugger', 'bin/swf/tests.swf']) == 0) {
+        if(command('eval', ['xvfb-run "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
           ok = true; break;
         }
       }
@@ -548,8 +547,12 @@ class Travix {
       exec('eval', ["ps aux | grep -ie [L]ogs/flashlog.txt | awk '{print $2}' | xargs kill -9"]);
 
       if(!ok) {
-        println('Flash execution failed too many times, build failure.');
-        exit(1);
+        // Testing didn't complete, so xvfb may have crashed even though tests are passing.
+        // Special solution for Buddy: As a final measure, check flashlog.txt if tests passed.
+        if(command('eval', ['grep -E "^[0-9]+ specs, 0 failures, [0-9]+ pending$$" "$flashPath/Logs/flashlog.txt"']) != 0) {
+          println('Flash execution failed too many times, build failure.');
+          exit(1);
+        }
       }
     });
   }
