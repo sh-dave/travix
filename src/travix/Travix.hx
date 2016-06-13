@@ -308,7 +308,7 @@ class Travix {
   function build(args:Array<String>, run) {
       
     startFold('build-$cmd');
-    exec('haxe', ['-lib', getInfos().name, 'tests.hxml'].concat(args).concat(this.args));
+    exec('haxe', ['-lib', getInfos().name, 'tests.hxml', '-D', 'travix'].concat(args).concat(this.args));
     endFold('build-$cmd');
     run();
     
