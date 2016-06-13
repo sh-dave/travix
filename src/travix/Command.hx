@@ -100,18 +100,18 @@ class Command {
       switch version {
         case null | '':
           exec('haxelib', ['install', lib, '--always']);
-          default:
-            exec('haxelib', ['install', lib, version, '--always']);
-          }
+        default:
+          exec('haxelib', ['install', lib, version, '--always']);
+        }
     });
   }
   
   function foldOutput<T>(tag:String, func:Void->T) {
-      tag = tag.replace('+', 'plus');
-      if(Travix.isTravis) Sys.println('travis_fold:start:$tag.${Travix.counter}');
-      var result = func();
-      if(Travix.isTravis) Sys.println('travis_fold:end:$tag.${Travix.counter}');
-      return result;
+    tag = tag.replace('+', 'plus');
+    if(Travix.isTravis) Sys.println('travis_fold:start:$tag.${Travix.counter}');
+    var result = func();
+    if(Travix.isTravis) Sys.println('travis_fold:end:$tag.${Travix.counter}');
+    return result;
   }
   
   function ensureDir(dir:String) {
@@ -158,11 +158,11 @@ class Command {
       switch Sys.systemName() {
         case 'Linux':
           exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
-          case 'Mac':
-            exec('brew', ['install', pckge].concat(if (args == null) [] else args));
-            case v:
-              println('Cannot run apt-get on $v');
-            }  
+        case 'Mac':
+          exec('brew', ['install', pckge].concat(if (args == null) [] else args));
+        case v:
+          println('Cannot run apt-get on $v');
+        }
     });
   }
 }
