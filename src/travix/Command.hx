@@ -95,7 +95,7 @@ class Command {
   
   function installLib(lib:String, ?version = '') {
     
-    foldOutput('installLib-$lib', function(){
+    foldOutput('installLib-$lib', function() {
       if (!libInstalled(lib))
       switch version {
         case null | '':
@@ -130,9 +130,7 @@ class Command {
   }
   
   function build(args:Array<String>, run) {
-    foldOutput('build-$cmd', function() {
-      exec('haxe', ['-lib', Travix.getInfos().name, 'tests.hxml', '-D', 'travix'].concat(args).concat(this.args));
-    });
+    foldOutput('build-$cmd', exec.bind('haxe', ['-lib', Travix.getInfos().name, 'tests.hxml', '-D', 'travix'].concat(args).concat(this.args)));
     run();
   }
   

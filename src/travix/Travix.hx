@@ -52,7 +52,7 @@ class Travix {
     }
     return switch read(Travix.TESTS) {
       case Some(v): v;
-      default: die('no -main class found in ${Travix.TESTS}');
+      default: die('no -main class found in $TESTS');
     }
   }
   
