@@ -50,7 +50,7 @@ class Travix {
             
       return None;
     }
-    return switch read(Travix.TESTS) {
+    return switch read(TESTS) {
       case Some(v): v;
       default: die('no -main class found in $TESTS');
     }
