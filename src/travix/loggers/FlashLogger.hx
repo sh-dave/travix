@@ -16,6 +16,7 @@ class FlashLogger {
   }
   
   public static function exit(code:Int) {
+    if(printBuf.length > 0) flash.Lib.trace(printBuf.toString());
     flash.system.System.exit(code);
   }
   
