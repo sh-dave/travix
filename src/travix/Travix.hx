@@ -61,7 +61,6 @@ class Travix {
     exit(code);
     return null;
   }
-  
 
   static function main() {
     
@@ -79,6 +78,7 @@ class Travix {
       case 'interp': new InterpCommand(cmd, args);
       case 'neko': new NekoCommand(cmd, args);
       case 'node': new NodeCommand(cmd, args);
+      case 'js': new JsCommand(cmd, args);
       case 'java': new JavaCommand(cmd, args);
       case 'flash': new FlashCommand(cmd, args);
       case 'cpp': new CppCommand(cmd, args);
