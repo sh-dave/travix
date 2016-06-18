@@ -21,7 +21,7 @@ class JsLogger {
   public static function exit(code:Int) {
     callPhantom({
      cmd: 'travix:exit',
-     exitCode: 0,
+     exitCode: code,
    });
   }
   
