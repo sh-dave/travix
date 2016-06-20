@@ -5,7 +5,7 @@ using sys.FileSystem;
 
 class JsCommand extends Command {
   override function execute() {
-    if(Travix.isMac) aptGet('phantomjs');
+    if(Travix.isMac && Travix.isTravis) aptGet('phantomjs');
     build(['-js', 'bin/js/tests.js'], function () {
       var index = 'bin/js/index.html';
       if(!index.exists()) index.saveContent(defaultIndexHtml());
