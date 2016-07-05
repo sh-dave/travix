@@ -17,6 +17,7 @@ install:
   
 script:
   - haxelib run travix interp
+  - haxelib run travix js
   - haxelib run travix flash
   - haxelib run travix php
   - haxelib run travix node
