@@ -22,6 +22,7 @@ Travix has individual commands for building:
 - node - run tests on nodejs (with hxnodejs)
 - php - run tests on php
 - java - run tests on java
+- js - run tests on phantomjs
 - flash - run tests on flash (see instructions below)
 - python - run tests on python
 - cs - run tests on cs

@@ -12,6 +12,12 @@ class Run extends buddy.SingleSuite {
           Sys.getCwd().should.not.be(null);
         });
       });
+      #elseif js
+      describe("On js", {
+        it("should run on phantomjs", {
+          js.Browser.navigator.userAgent.should.match(~/PhantomJS/);
+        });
+      });      
       #elseif flash
       describe("On Flash", {
         beforeAll({
