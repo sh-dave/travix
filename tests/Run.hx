@@ -8,7 +8,7 @@ class Run extends buddy.SingleSuite {
     describe("Using travix", {
       #if (sys || nodejs)
       describe("On Sys targets and Node.js", {
-        it("should compile and exit with status 0 if everything went well", {
+        it("exit with status 0 if everything went well", {
           Sys.getCwd().should.not.be(null);
         });
       });
@@ -20,14 +20,11 @@ class Run extends buddy.SingleSuite {
       });      
       #elseif flash
       describe("On Flash", {
-        beforeAll({
-          haxe.Log.trace = function(v, ?inf) flash.Lib.trace(v);
-        });
-
-        it("should trace when using flash.Lib.trace", {
+        it("tracing should work as usual", {
           trace("Flash trace");
+          true.should.be(true);
         });
-        it("should exit when using flash.system.System.exit", {
+        it("should exit like a Sys target", {
           // Will be done automatically by Buddy
           true.should.be(true);
         });
