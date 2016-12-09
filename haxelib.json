@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Add js as supported platform",
-	"version": "0.6.0",
+	"releasenote": "Minor fixes (js utf-8 and php nesting level)",
+	"version": "0.6.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
