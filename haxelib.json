@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Minor fixes (js utf-8 and php nesting level)",
-	"version": "0.6.1",
+	"releasenote": "Fix failure of upgrading node more than once in the same build",
+	"version": "0.6.2",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
