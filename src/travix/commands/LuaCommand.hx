@@ -7,7 +7,7 @@ class LuaCommand extends Command {
     if(command('eval', ['which luarocks >/dev/null']) != 0) {
       foldOutput('lua-install', function() {
         // Required repo for cmake (for luv library)
-        exec('eval', ['sudo add-apt-repository ppa:george-edison55/precise-backports']);
+        exec('eval', ['sudo add-apt-repository -y ppa:george-edison55/precise-backports']);
         exec('eval', ['sudo apt-get update']);
 
         for(pack in ["lua5.2","make","cmake","unzip","libpcre3","libpcre3-dev"]) 
@@ -36,7 +36,7 @@ class LuaCommand extends Command {
 
         // Install lua libraries
         // Based on https://github.com/HaxeFoundation/haxe/blob/3a6d024019aad28ab138fbb88cade34ff2e5bf19/tests/RunCi.hx#L473
-        exec('eval', ['sudo luarocks install lrexlib-pcre 2.8.0-1']);
+        exec('eval', ['sudo luarocks install lrexlib-pcre 2.7.2-1']);
         exec('eval', ['sudo luarocks install luv 1.9.1-0']);
         exec('eval', ['sudo luarocks install luasocket 3.0rc1-2']);
         exec('eval', ['sudo luarocks install environ 0.1.0-1']);
