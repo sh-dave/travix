@@ -62,7 +62,11 @@ echo "Current java version:"
 java -version
 
 echo "=== Installing Lua..."
-apt-get -y install lua5.2 make unzip libpcre3 libpcre3-dev
+# Required repo for cmake (for luv library)
+add-apt-repository ppa:george-edison55/precise-backports
+apt-get update
+
+apt-get -y install lua5.2 make cmake unzip libpcre3 libpcre3-dev
 
 # Add source files so luarocks works
 mkdir -p /usr/include/lua/5.2
@@ -83,9 +87,12 @@ cd ..
 rm -f luarocks-2.3.0.tar.gz
 rm -rf luarocks-2.3.0
 
-# Install lua libraries so it works with Haxe
-luarocks install lrexlib-pcre 2.7.2-1
-luarocks install luafilesystem
+# Install lua libraries
+# Based on https://github.com/HaxeFoundation/haxe/blob/3a6d024019aad28ab138fbb88cade34ff2e5bf19/tests/RunCi.hx#L473
+luarocks install lrexlib-pcre 2.8.0-1
+luarocks install luv 1.9.1-0
+luarocks install luasocket 3.0rc1-2
+luarocks install environ 0.1.0-1
 
 echo "=== Installing Haxe 3.3.0-rc.1..."
 wget -q http://ciscoheat.github.io/cdn/haxe/haxe-3.3.0-rc.1-linux-installer.sh
