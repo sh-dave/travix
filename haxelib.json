@@ -14,8 +14,8 @@
 		"back2dos",
 		"kevinresol"
 	],
-	"releasenote": "Lua support. Bam!",
-	"version": "0.7.0",
+	"releasenote": "Fixed some problems with Lua installation script.",
+	"version": "0.7.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
