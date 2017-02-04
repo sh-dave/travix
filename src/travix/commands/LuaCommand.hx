@@ -6,10 +6,6 @@ class LuaCommand extends Command {
   override function execute() {
     if(command('eval', ['which luarocks >/dev/null']) != 0) {
       foldOutput('lua-install', function() {
-        // Required repo for cmake (for luv library)
-        exec('eval', ['sudo add-apt-repository -y ppa:george-edison55/precise-backports']);
-        exec('eval', ['sudo apt-get update']);
-
         for(pack in ["lua5.2","make","cmake","unzip","libpcre3","libpcre3-dev"]) 
           aptGet(pack);
 
