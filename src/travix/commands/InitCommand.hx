@@ -15,7 +15,7 @@ class InitCommand extends Command {
 	
 	static inline var PROFILE = 'https://travis-ci.org/profile/';
   static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, java';
-  static inline var ALL = 'interp,neko,python,node,js,flash,java,cpp,cs,php';
+  static inline var ALL = 'interp,neko,python,node,js,flash,java,cpp,cs,php,lua';
   
   static inline var TRAVIS_CONFIG = '.travis.yml';
 	static inline var TESTS = @:privateAccess Travix.TESTS;
