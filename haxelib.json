@@ -13,10 +13,10 @@
 	"contributors": [
 		"back2dos",
 		"kevinresol",
-    "ciscoheat"
+		"ciscoheat"
 	],
-	"releasenote": "Fixed some problems with Lua installation script.",
-	"version": "0.7.1",
+	"releasenote": "Update to Haxe 3.4.0",
+	"version": "0.8.0",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
