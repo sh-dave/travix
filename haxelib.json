@@ -12,7 +12,8 @@
 	"description": "Travis helper for Haxe",
 	"contributors": [
 		"back2dos",
-		"kevinresol"
+		"kevinresol",
+    "ciscoheat"
 	],
 	"releasenote": "Fixed some problems with Lua installation script.",
 	"version": "0.7.1",
