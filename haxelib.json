@@ -15,8 +15,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Update to Haxe 3.4.0",
-	"version": "0.8.0",
+	"releasenote": "Travis uses sh, not bash.",
+	"version": "0.8.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
