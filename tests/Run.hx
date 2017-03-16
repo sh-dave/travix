@@ -8,7 +8,7 @@ class Run extends buddy.SingleSuite {
     describe("Using travix", {
       #if (sys || nodejs)
       describe("On Sys targets and Node.js", {
-        it("exit with status 0 if everything went well", {
+        it("should exit with status 0 if everything went well", {
           Sys.getCwd().should.not.be(null);
         });
       });

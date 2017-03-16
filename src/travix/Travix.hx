@@ -86,6 +86,7 @@ class Travix {
       case 'php': new PhpCommand(cmd, args);
       case 'python': new PythonCommand(cmd, args);
       case 'cs': new CsCommand(cmd, args);
+      case 'lua': new LuaCommand(cmd, args);
       case v: die('Unknown command $v');
     }
     command.execute();

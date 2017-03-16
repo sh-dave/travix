@@ -12,10 +12,11 @@
 	"description": "Travis helper for Haxe",
 	"contributors": [
 		"back2dos",
-		"kevinresol"
+		"kevinresol",
+		"ciscoheat"
 	],
-	"releasenote": "Fix failure of upgrading node more than once in the same build",
-	"version": "0.6.2",
+	"releasenote": "Travis uses sh, not bash.",
+	"version": "0.8.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }

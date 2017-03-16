@@ -27,6 +27,7 @@ Travix has individual commands for building:
 - python - run tests on python
 - cs - run tests on cs
 - cpp - run tests on cpp
+- lua - run tests on lua
 
 So instead of having to have to define all kinds of builds and figuring out the right way to run them, this will do.
 
