@@ -75,6 +75,7 @@ class Travix {
       case null | 'help': new HelpCommand(cmd, args);
       case 'install': new InstallCommand(cmd, args);
       case 'init': new InitCommand(cmd, args);
+      case 'release': new ReleaseCommand(cmd, args);
       case 'interp': new InterpCommand(cmd, args);
       case 'neko': new NekoCommand(cmd, args);
       case 'node': new NodeCommand(cmd, args);
