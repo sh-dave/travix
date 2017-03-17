@@ -15,8 +15,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Travis uses sh, not bash.",
-	"version": "0.8.1",
+	"releasenote": "Fix lua on macos",
+	"version": "0.8.2",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
