@@ -67,6 +67,7 @@ class InitCommand extends Command {
       TESTS.saveContent([
         '-cp $cp',
         '-main $main',
+        '-dce full',
       ].join('\n'));
       
       {
