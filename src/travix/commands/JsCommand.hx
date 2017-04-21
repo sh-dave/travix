@@ -11,7 +11,7 @@ class JsCommand extends Command {
       if(!index.exists()) index.saveContent(defaultIndexHtml());
       var runPhantom = 'bin/js/runPhantom.js';
       if(!runPhantom.exists()) runPhantom.saveContent(defaultPhantomScript());
-      exec('phantomjs', [runPhantom]);
+      exec('phantomjs', ['--web-security=no', runPhantom]);
     });
   }
   
