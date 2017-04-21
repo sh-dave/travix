@@ -15,8 +15,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Fix lua on macos",
-	"version": "0.8.2",
+	"releasenote": "JS: allow cross domain http requests",
+	"version": "0.8.3",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
