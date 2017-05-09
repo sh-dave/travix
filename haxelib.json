@@ -15,8 +15,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "JS: allow cross domain http requests",
-	"version": "0.8.3",
+	"releasenote": "Update phantomjs to 2.1.1 on linux",
+	"version": "0.8.4",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
