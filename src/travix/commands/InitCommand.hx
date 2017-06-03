@@ -12,7 +12,6 @@ using sys.FileSystem;
 using sys.io.File;
 
 class InitCommand extends Command {
-	
 	static inline var PROFILE = 'https://travis-ci.org/profile/';
   static inline var DEFAULT_PLATFORMS = 'interp, neko, node, python, java';
   static inline var ALL = 'interp,neko,python,node,js,flash,java,cpp,cs,php,lua';
@@ -23,28 +22,28 @@ class InitCommand extends Command {
 	
 	override function execute() {
     var source = Unknown;
-    {
-      var p = new Process('git', ['config', '--get', 'remote.origin.url']);
-      switch p.exitCode() {
-        case 0: 
-          var url = p.stdout.readAll().toString();
-          if (url.startsWith('https://github.com/')) {
-            var parts = url.split('/');
-            var user = parts[3],
-                project = parts[4].trim();
-                
-            if (project.endsWith('.git'))
-              project = project.substr(0, project.length - 4);
+    switch tryToRun('git', ['config', '--get', 'remote.origin.url']) {
+      case Success(url):
+        if (url.startsWith('https://github.com/')) {
+          var parts = url.split('/');
+          var user = parts[3],
+              project = parts[4].trim();
               
-            source = GitHub(user, project);
-          }
-          else {
-            println('Git remote found, but does not seem to be on GitHub. Assuming plain Git');
-            source = Git(url);
-          }
-        default: 
-          println('No git installed. Cannot guess remote url.');
-      }
+          if (project.endsWith('.git'))
+            project = project.substr(0, project.length - 4);
+            
+          source = GitHub(user, project);
+        }
+        else {
+          println('Git remote found, but does not seem to be on GitHub. Assuming plain Git');
+          source = Git(url);
+        }      
+      case Failure(_, ''):
+        println('Project doesn\'t seem to be a git repo');
+      case Failure(404, _):
+        println('No git installed. Cannot guess remote url.');
+      case Failure(_, msg):
+        println('Error while running git: $msg');
     }
     
     makeYml();
@@ -97,7 +96,7 @@ class InitCommand extends Command {
         default:
       }
       
-      if (ask('Activate CI for this project now'))
+      if (ask('Activate CI for this project now', true))
         switch systemName() {
           case 'Windows':
             exec('start', [profile]);
@@ -113,7 +112,7 @@ class InitCommand extends Command {
 	
 
   function makeYml() {
-    if (TRAVIS_CONFIG.exists() && !ask('The $TRAVIS_CONFIG is already present. Do you wish to replace it with a new one')) return;
+    if (TRAVIS_CONFIG.exists() && !ask('The $TRAVIS_CONFIG is already present. Do you wish to replace it with a new one', false)) return;
     
     var platforms = [for (p in enter('platforms as a comma-separated list or `all`', DEFAULT_PLATFORMS).split(',')) 
         switch p.trim() {

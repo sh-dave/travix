@@ -63,7 +63,6 @@ class Travix {
   }
 
   static function main() {
-    
     incrementCounter();
     
     var args = Sys.args();

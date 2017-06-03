@@ -40,14 +40,14 @@ class Command {
         }
     }
   
-  function ask(question:String) {
+  function ask(question:String, yes:Bool) {
+    var defaultAnswer = if (yes) "yes" else "no";
     while (true) {
-      print('$question (y/n)? ');
-      var c = Sys.getChar(true);
-      println('');
-      switch String.fromCharCode(c).toUpperCase() {
-        case 'Y': return true;
-        case 'N': return false;
+      print('$question? ($defaultAnswer)');
+      switch Sys.stdin().readLine().trim().toUpperCase() {
+        case '': return yes;
+        case 'YES', 'Y': return true;
+        case 'NO', 'N': return false;
         default:
       }
     }
@@ -57,6 +57,15 @@ class Command {
   
   function tryToRun(cmd:String, ?params:Array<String>) 
     return try {
+      #if (hxnodejs && !macro)
+        var ret = js.node.ChildProcess.spawnSync(cmd, params);
+        function str(buf:js.node.Buffer)
+          return buf.toString();
+        if (ret.status == 0)
+          Success(str(ret.stderr) + str(ret.stdout));
+        else
+          Failure(ret.status, str(ret.stderr));
+      #else
       var p = new Process(cmd, params);
       switch p.exitCode() {
         case 0:
@@ -67,6 +76,7 @@ class Command {
         case v:
           Failure(v, p.stderr.readAll().toString());
       }
+      #end
     } catch (e:Dynamic) {
       Failure(404, 'Unknown command $cmd'); 
     }
@@ -133,6 +143,15 @@ class Command {
     foldOutput('build-$cmd', exec.bind('haxe', ['-lib', Travix.getInfos().name, 'tests.hxml', '-lib', 'travix'].concat(args).concat(this.args)));
     run();
   }
+
+  #if (hxnodejs && !macro)
+    static inline function command(cmd:String, ?args:Array<String>):Int {
+      if (args == null)
+        return js.node.ChildProcess.spawnSync(cmd, cast {stdio: "inherit", shell: true }).status;
+      else
+        return js.node.ChildProcess.spawnSync(cmd, args, cast {stdio: "inherit", shell: true }).status;
+    }
+  #end
   
   function exec(cmd, ?args) {
     var a = [cmd];
