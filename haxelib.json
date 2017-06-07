@@ -1,22 +1,22 @@
 {
 	"main": "travix.Travix",
 	"name": "travix",
-	"license": "MIT",
+	"description": "Travis helper for Haxe",
+	"classPath": "src",
+	"dependencies": {},
+	"url": "http://github.com/back2dos/travix/",
+	"contributors": [
+		"back2dos",
+		"kevinresol",
+		"ciscoheat"
+	],
+	"version": "0.8.5",
+	"releasenote": "Publish to npm",
 	"tags": [
 		"ci",
 		"travis",
 		"build",
 		"tool"
 	],
-	"classPath": "src",
-	"description": "Travis helper for Haxe",
-	"contributors": [
-		"back2dos",
-		"kevinresol",
-		"ciscoheat"
-	],
-	"releasenote": "Update phantomjs to 2.1.1 on linux",
-	"version": "0.8.4",
-	"url": "http://github.com/back2dos/travix/",
-	"dependencies": {}
+	"license": "MIT"
 }
