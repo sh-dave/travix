@@ -2,3 +2,5 @@
 -lib hxnodejs 
 -main travix.Travix 
 -js bin/travix.js
+
+--macro travix.Macro.shebang()

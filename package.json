@@ -1,0 +1,14 @@
+{
+  "name": "haxe-travix",
+  "version": "0.8.5",
+  "bin": {
+    "travix": "bin/travix.js"
+  },
+  "scripts": {
+   "prepublishOnly": "haxe build-nodejs.hxml" 
+  },
+  "description": "Travis helper for Haxe",
+  "repository": "https://github.com/back2dos/travix",
+  "author": "Juraj Kirchheim <back2dos@gmail.com>",
+  "license": "MIT"
+}
