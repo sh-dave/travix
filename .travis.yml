@@ -13,6 +13,7 @@ matrix:
 
 install:
   - haxelib dev travix .
+  - haxe build-neko.hxml
   - haxelib run travix install
   
 script:
