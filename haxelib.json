@@ -9,8 +9,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"version": "0.8.5",
-	"releasenote": "Publish to npm",
+	"version": "0.9.0",
+	"releasenote": "Allow optional haxelib.json & tests.hxml",
 	"tags": [
 		"ci",
 		"travis",
