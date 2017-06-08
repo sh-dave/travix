@@ -1,5 +1,3 @@
-/bin/php
-/bin/cs
-/bin/java
 bin
 /.vagrant
+run.n

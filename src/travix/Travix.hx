@@ -79,10 +79,10 @@ class Travix {
     incrementCounter();
     
     var args = Sys.args();
-    trace(args);
-    #if interp
+    
+    if(Sys.getEnv('HAXELIB_RUN') == '1')
       Sys.setCwd(args.pop());
-    #end
+    
     var cmd = args.shift();
     var command:Command = switch cmd {
       case null | 'help': new HelpCommand(cmd, args);

@@ -1,5 +1,4 @@
 {
-	"main": "travix.Travix",
 	"name": "travix",
 	"description": "Travis helper for Haxe",
 	"classPath": "src",
