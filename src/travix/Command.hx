@@ -140,7 +140,14 @@ class Command {
   }
   
   function build(args:Array<String>, run) {
-    foldOutput('build-$cmd', exec.bind('haxe', ['-lib', Travix.getInfos().name, 'tests.hxml', '-lib', 'travix'].concat(args).concat(this.args)));
+    args = args.concat(['-lib', 'travix']);
+    switch Travix.getInfos() {
+      case None: // do nothing
+      case Some(info): args = args.concat(['-lib', info.name]);
+    }
+    if(Travix.TESTS.exists()) args.push(Travix.TESTS);
+    trace(args.concat(this.args));
+    foldOutput('build-$cmd', exec.bind('haxe', args.concat(this.args)));
     run();
   }
 

@@ -19,7 +19,7 @@ import haxe.macro.Context;
 #end
 
 class Travix {
-  static inline var TESTS = 'tests.hxml';
+  public static inline var TESTS = 'tests.hxml';
   static inline var TRAVIX_COUNTER = '.travix_counter';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
@@ -32,8 +32,9 @@ class Travix {
   
   public static var counter = 0;
   
-  public static function getInfos():Infos
-    return haxe.Json.parse(HAXELIB_CONFIG.getContent());
+  public static function getInfos():Option<Infos> {
+    return if(HAXELIB_CONFIG.exists()) Some(haxe.Json.parse(HAXELIB_CONFIG.getContent())) else None;
+  }
     
   public static function getMainClass() {
     
@@ -50,10 +51,22 @@ class Travix {
             
       return None;
     }
-    return switch read(TESTS) {
-      case Some(v): v;
-      default: die('no -main class found in $TESTS');
+    
+    var args = Sys.args();
+    for(i in 0...args.length) {
+      if(args[i] == '-main') return args[i + 1];
+      else if(args[i].endsWith('.hxml')) switch read(args[i]) {
+        case None: // do nothing
+        case Some(v): return v;
+      }
     }
+    
+    if(TESTS.exists()) switch read(TESTS) {
+      case None: // do nothing
+      case Some(v): return v;
+    }
+    
+    return die('no -main class found');
   }
   
   public static function die(message:String, ?code = 500):Dynamic {
@@ -66,6 +79,7 @@ class Travix {
     incrementCounter();
     
     var args = Sys.args();
+    trace(args);
     #if interp
       Sys.setCwd(args.pop());
     #end
