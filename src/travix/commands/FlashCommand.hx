@@ -16,7 +16,6 @@ class FlashCommand extends Command {
 
     foldOutput('flash-install', function() {
       // Some xvfb settings
-      exec('export', ['DISPLAY=:99.0']);
       exec('export', ['AUDIODEV=null']);
 
       // Create a configuration file so the trace log is enabled
@@ -62,7 +61,7 @@ class FlashCommand extends Command {
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;
       for(i in 1 ... 8) {
-        if(command('eval', ['xvfb-run "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
+        if(command('eval', ['xvfb-run -a "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
           ok = true; break;
         }
       }
