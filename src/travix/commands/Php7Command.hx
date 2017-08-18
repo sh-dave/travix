@@ -2,9 +2,9 @@ package travix.commands;
 
 import Sys.*;
 
-class PhpCommand extends Command {
+class Php7Command extends Command {
 
-  var phpVersionPattern:EReg = new EReg("PHP 5\\.*","");
+  var phpVersionPattern:EReg = new EReg("PHP 7\\.*","");
 
   override function execute() {
 
@@ -15,8 +15,8 @@ class PhpCommand extends Command {
     foldOutput('php-install', function() {
       switch Sys.systemName() {
         case 'Linux':
-          phpCmd = 'php5.6';
-          phpPackage = 'php5.6';
+          phpCmd = 'php7.1';
+          phpPackage = 'php7.1';
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -28,7 +28,7 @@ class PhpCommand extends Command {
           }
         case 'Mac':
           phpCmd = 'php';
-          phpPackage = 'php56';
+          phpPackage = 'php71';
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -49,7 +49,7 @@ class PhpCommand extends Command {
       exec(phpCmd, ['--version']);
     });
 
-    build(['-php', 'bin/php'], function () {
+    build(['-php', 'bin/php', '-D', 'php7'], function () {
       exec(phpCmd, ['-d', 'xdebug.max_nesting_level=9999', 'bin/php/index.php']);
     });
 
