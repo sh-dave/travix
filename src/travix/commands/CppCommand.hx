@@ -5,7 +5,7 @@ import Sys.*;
 class CppCommand extends Command {
   
   override function execute() {
-    var main = Travix.getMainClass();
+    var main = Travix.getMainClassLocalName();
     
     if (getEnv('TRAVIS_HAXE_VERSION') == 'development') {
       

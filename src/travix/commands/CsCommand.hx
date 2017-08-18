@@ -16,14 +16,14 @@ class CsCommand extends Command {
         }
       }
       
-    var main = Travix.getMainClass();
+    var main = Travix.getMainClassLocalName();
     
     installLib('hxcs');
     
     build(['-cs', 'bin/cs/'], function () {
     
       if (Travix.isWindows)
-        exec('bin/cs/bin/$main.exe'.replace('/', '\\'));
+        exec('bin\\cs\\bin\\$main.exe');
       else
         exec('mono', ['bin/cs/bin/$main.exe']);
     });

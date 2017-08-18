@@ -3,7 +3,7 @@ package travix.commands;
 class JavaCommand extends Command {
   
   override function execute() {
-    var main = Travix.getMainClass();
+    var main = Travix.getMainClassLocalName();
     
     installLib('hxjava');
     

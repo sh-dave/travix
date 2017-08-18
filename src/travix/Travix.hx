@@ -36,7 +36,10 @@ class Travix {
     return if(HAXELIB_CONFIG.exists()) Some(haxe.Json.parse(HAXELIB_CONFIG.getContent())) else None;
   }
     
-  public static function getMainClass() {
+  /**
+   * @return fully qualified class name of the main class
+   */
+  public static function getMainClassFQName():String {
     
     function read(file:String) {
       for (line in file.getContent().split('\n').map(function (s:String) return s.split('#')[0].trim())) 
@@ -69,6 +72,13 @@ class Travix {
     return die('no -main class found');
   }
   
+  /**
+   * @return non-qualified class name of the main class (i.e. without package)
+   */
+  public static function getMainClassLocalName():String {
+    return getMainClassFQName().split(".").pop();
+  }
+
   public static function die(message:String, ?code = 500):Dynamic {
     println(message);
     exit(code);
