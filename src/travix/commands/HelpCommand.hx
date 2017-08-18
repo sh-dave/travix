@@ -13,7 +13,8 @@ class HelpCommand extends Command {
     println('  neko - run tests on neko');
     println('  node - run tests on nodejs (with hxnodejs)');
     println('  js - run tests on js (with phantomjs)');
-    println('  php - run tests on php');
+    println('  php - run tests on php 5.x');
+    println('  php7 - run tests on php 7.x');
     println('  java - run tests on java');
     println('  flash - run tests on flash');
     println('  python - run tests on python');
