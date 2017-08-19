@@ -8,7 +8,8 @@ class JavaCommand extends Command {
     installLib('hxjava');
     
     build(['-java', 'bin/java'], function () {
-      exec('java', ['-jar', 'bin/java/$main.jar']);
+      var outputFile = main + (isDebugBuild() ? '-Debug' : '');
+      exec('java', ['-jar', 'bin/java/$outputFile.jar']);
     });
   }
 }

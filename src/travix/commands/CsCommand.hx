@@ -35,10 +35,11 @@ class CsCommand extends Command {
     installLib('hxcs');
 
     build(['-cs', 'bin/cs/'], function () {
+      var outputFile = main + (isDebugBuild() ? '-Debug' : '');
       if (Travix.isWindows)
-        exec('bin\\cs\\bin\\$main.exe');
+        exec('bin\\cs\\bin\\$outputFile.exe');
       else
-        exec('mono', ['bin/cs/bin/$main.exe']);
+        exec('mono', ['bin/cs/bin/$outputFile.exe']);
     });
   }
 }
