@@ -22,9 +22,11 @@ class PhpCommand extends Command {
             case Failure(_):   phpInstallationRequired = true;
           }
           if (phpInstallationRequired) {
+            exec('sudo', ['apt-get', '-qy', 'install', 'software-properties-common']);  // ensure add-apt-repository command is present
             exec('sudo', ['add-apt-repository', '-y', 'ppa:ondrej/php']);
             exec('sudo', ['apt-get', 'update']);
-            exec('sudo', ['apt-get', '-q', '-y', '--allow-unauthenticated', 'install', phpPackage]);
+            for (pgk in ['cli', 'mbstring', 'mcrypt', 'xml'])
+                exec('sudo', ['apt-get', '-q', '-y', '--allow-unauthenticated', 'install', phpPackage + '-' + pgk]);
           }
         case 'Mac':
           phpCmd = 'php';
