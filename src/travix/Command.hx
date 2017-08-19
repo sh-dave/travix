@@ -151,6 +151,30 @@ class Command {
     run();
   }
 
+  function isDebugBuild():Bool {
+    function declaresDebugFlag(file:String):Bool {
+      for (line in file.getContent().split('\n').map(function (s:String) return s.split('#')[0].trim())) {
+        if (line == '-debug')
+          return true;
+        if (line.endsWith('.hxml') && declaresDebugFlag(line))
+          return true;
+      }
+      return false;
+    }
+
+    for (arg in args) {
+      if (arg == '-debug')
+        return true;
+      if (arg.endsWith('.hxml') && declaresDebugFlag(arg))
+        return true;
+    }
+
+    if (Travix.TESTS.exists() && declaresDebugFlag(Travix.TESTS))
+      return true;
+
+    return false;
+  }
+  
   #if (hxnodejs && !macro)
     static inline function command(cmd:String, ?args:Array<String>):Int {
       if (args == null)
