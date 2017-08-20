@@ -35,13 +35,13 @@ class FlashCommand extends Command {
         exec('eval', ['wget -nv -O flash_player_sa_linux.tar.gz https://fpdownload.macromedia.com/pub/flashplayer/updaters/26/flash_player_sa_linux_debug.x86_64.tar.gz']);
         exec('eval', ['tar -C "$flashPath" -xf flash_player_sa_linux.tar.gz --wildcards "flashplayerdebugger"']);
         exec('eval', ['rm -f flash_player_sa_linux.tar.gz']);
-      }
-      
-      // Required flash libs
-      var packages = ["libcurl3","libglib2.0-0","libx11-6", "libxext6","libxt6",
-          "libxcursor1","libnss3", "libgtk2.0-0"];
+        
+        // Required flash libs
+        var packages = ["libcurl3","libglib2.0-0","libx11-6", "libxext6","libxt6",
+            "libxcursor1","libnss3", "libgtk2.0-0"];
 
-      for (pack in packages) aptGet(pack);
+        for (pack in packages) aptGet(pack);
+      }
       
       // Tail the logfile. Must use eval to start tail in background, to see the output.
       exec('eval', ['tail -f --follow=name --retry "$flashPath/Logs/flashlog.txt" &']);
