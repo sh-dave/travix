@@ -5,13 +5,14 @@ import Sys.*;
 class FlashCommand extends Command {
   
   override function execute() {
-    var homePath = Travix.isLinux ? "$HOME" : null;
 
-    if(homePath == null) {
+    // if we are not on Linux we only compile but do not run the tests
+    if(!Travix.isLinux) {
       build(['-swf', 'bin/swf/tests.swf'], function () {});
       return;
-    }    
+    }
 
+    var homePath = "$HOME";
     var flashPath = '$homePath/.macromedia/Flash_Player';
 
     foldOutput('flash-install', function() {
@@ -29,26 +30,11 @@ class FlashCommand extends Command {
       exec('eval', ['rm -f "$flashPath/Logs/flashlog.txt"']);
       exec('eval', ['touch "$flashPath/Logs/flashlog.txt"']);
 
-      // Download and unzip the player, unless it exists already
-      if(command("eval", ['test -f "$flashPath/flashplayerdebugger"']) != 0) {
-        exec('wget', ['-nv', 'http://fpdownload.macromedia.com/pub/flashplayer/updaters/11/flashplayer_11_sa_debug.i386.tar.gz']);
-        exec('eval', ['tar -C "$flashPath" -xf flashplayer_11_sa_debug.i386.tar.gz --wildcards "flashplayerdebugger"']);
-        exec('rm', ['-f', 'flashplayer_11_sa_debug.i386.tar.gz']);
-
-        // Installing 386 packages on Travis/trusty is a mess.
-        if(Travix.isTravis) {
-          exec('eval', ['wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -']);
-          exec('eval', ['sudo sed -i -e \'s/deb http/deb [arch=amd64] http/\' "/etc/apt/sources.list.d/google-chrome.list" "/opt/google/chrome/cron/google-chrome"']);
-          exec('sudo', ['dpkg', '--add-architecture', 'i386']);
-          exec('sudo', ['apt-get', 'update']);
-        }
-
-        // Required flash libs
-        var packages = ["libcurl3:i386","libglib2.0-0:i386","libx11-6:i386", "libxext6:i386","libxt6:i386",
-          "libxcursor1:i386","libnss3:i386", "libgtk2.0-0:i386"];
-
-        for(pack in packages) aptGet(pack);
-
+      // Download and unpack the player, unless it exists already
+      if (command("eval", ['test -f "$flashPath/flashplayerdebugger"']) != 0) {
+        exec('eval', ['wget -nv -O flash_player_sa_linux.tar.gz https://fpdownload.macromedia.com/pub/flashplayer/updaters/26/flash_player_sa_linux_debug.x86_64.tar.gz']);
+        exec('eval', ['tar -C "$flashPath" -xf flash_player_sa_linux.tar.gz --wildcards "flashplayerdebugger"']);
+        exec('eval', ['rm -f flash_player_sa_linux.tar.gz']);
       }
       
       // Tail the logfile. Must use eval to start tail in background, to see the output.
