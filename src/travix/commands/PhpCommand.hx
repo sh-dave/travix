@@ -36,6 +36,7 @@ class PhpCommand extends Command {
             case Failure(_):   phpInstallationRequired = true;
           }
           if (phpInstallationRequired) {
+            exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
             exec('brew', ['tap', 'homebrew/homebrew-php']);
             exec('brew', ['install', '--without-apache', '--without-snmp', phpPackage]);
           }
