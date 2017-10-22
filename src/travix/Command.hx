@@ -1,7 +1,5 @@
 package travix;
 
-import haxe.*;
-import haxe.ds.Option;
 import Sys.*;
 import sys.io.Process;
 
@@ -14,7 +12,7 @@ class Command {
 
   var cmd:String;
   var args:Array<String>;
-  var isFirstPackageInstallation:Bool = true;
+  var isFirstPackageInstallation = true;
 
   public function new(cmd, args) {
     this.cmd = cmd;
@@ -224,19 +222,19 @@ class Command {
       switch Sys.systemName() {
         case 'Linux':
           if (isFirstPackageInstallation) {
-            exec('apt-get', 'update');
+            exec('apt-get', ['update']);
             isFirstPackageInstallation = false;
           }
           exec('sudo', ['apt-get', 'install', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
         case 'Mac':
           if (isFirstPackageInstallation) {
-            exec('brew', 'update'); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
+            exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
             isFirstPackageInstallation = false;
           }
           exec('brew', ['install', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
         case v:
           println('WARN: Don\'t know how to install packages on $v');
-        }
+      }
     });
   }
 }

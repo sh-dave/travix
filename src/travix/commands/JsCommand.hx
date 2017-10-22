@@ -26,7 +26,7 @@ class JsCommand extends Command {
             'libfreetype6-dev',
             'libssl-dev',
             'libxft-dev'
-          ])
+          ]);
 
           exec('wget', ['https://github.com/Medium/phantomjs/releases/download/v2.1.1/$PHANTOM_JS.tar.bz2']);
           exec('tar', ['xvjf', '$PHANTOM_JS.tar.bz2']);
