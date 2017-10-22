@@ -6,7 +6,7 @@ class CsCommand extends Command {
 
     if (Travix.isMac) {
 
-      aptGet('mono');
+      installPackage('mono');
 
     } else if (Travix.isLinux) {
 
@@ -21,10 +21,9 @@ class CsCommand extends Command {
           exec('eval', ['echo "deb http://download.mono-project.com/repo/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/mono-official.list']);
         default:
       }
-      exec('eval', ['sudo apt-get update']);
 
-      aptGet('mono-devel');
-      aptGet('mono-mcs');
+      installPackage('mono-devel');
+      installPackage('mono-mcs');
 
       // print the effective mono version
       exec('mono', ['-V']);

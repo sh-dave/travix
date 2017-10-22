@@ -22,11 +22,14 @@ class Php7Command extends Command {
             case Failure(_):   phpInstallationRequired = true;
           }
           if (phpInstallationRequired) {
-            exec('sudo', ['apt-get', '-qy', 'install', 'software-properties-common']);  // ensure add-apt-repository command is present
-            exec('sudo', ['add-apt-repository', '-y', 'ppa:ondrej/php']);
-            exec('sudo', ['apt-get', 'update']);
-            for (pgk in ['cli', 'mbstring', 'mcrypt', 'xml'])
-                exec('sudo', ['apt-get', '-q', '-y', '--allow-unauthenticated', 'install', phpPackage + '-' + pgk]);
+            installPackage('software-properties-common');  // ensure 'add-apt-repository' command is present
+            exec('sudo', ['add-apt-repository', '-u', '-y', 'ppa:ondrej/php']);
+            installPackages([
+              phpPackage + "-cli",
+              phpPackage + "-mbstring",
+              phpPackage + "-mcrypt",
+              phpPackage + "-xml"
+            ], [ "--allow-unauthenticated" ]);
           }
         case 'Mac':
           phpCmd = 'php';
@@ -36,9 +39,8 @@ class Php7Command extends Command {
             case Failure(_):   phpInstallationRequired = true;
           }
           if (phpInstallationRequired) {
-            exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
             exec('brew', ['tap', 'homebrew/homebrew-php']);
-            exec('brew', ['install', '--without-apache', '--without-snmp', phpPackage]);
+            installPackage(phpPackage, ['--without-apache', '--without-snmp']);
           }
         case v:
           phpCmd = 'php';

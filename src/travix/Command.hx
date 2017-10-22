@@ -11,24 +11,25 @@ using sys.FileSystem;
 using sys.io.File;
 
 class Command {
-  
+
   var cmd:String;
   var args:Array<String>;
-  
+  var isFirstPackageInstallation:Bool = true;
+
   public function new(cmd, args) {
     this.cmd = cmd;
     this.args = args;
   }
-  
+
   public function execute(){}
-  
-  function enter(what:String, ?def:String) 
+
+  function enter(what:String, ?def:String)
     switch def {
       case null:
         println('Please specify $what');
         while (true) {
           switch Sys.stdin().readLine().trim() {
-            case '': 
+            case '':
             case v: return v;
           }
         }
@@ -39,7 +40,7 @@ class Command {
           case v: v;
         }
     }
-  
+
   function ask(question:String, yes:Bool) {
     var defaultAnswer = if (yes) "yes" else "no";
     while (true) {
@@ -51,11 +52,11 @@ class Command {
         default:
       }
     }
-    
+
     return throw 'unreachable';
   }
-  
-  function tryToRun(cmd:String, ?params:Array<String>) 
+
+  function tryToRun(cmd:String, ?params:Array<String>)
     return try {
       #if (hxnodejs && !macro)
         var ret = js.node.ChildProcess.spawnSync(cmd, params);
@@ -78,18 +79,18 @@ class Command {
       }
       #end
     } catch (e:Dynamic) {
-      Failure(404, 'Unknown command $cmd'); 
+      Failure(404, 'Unknown command $cmd');
     }
-  
+
   function run(cmd:String, ?params:Array<String>) {
     var a = [cmd];
     if (params != null)
       a = a.concat(params);
-      
+
     print('> ${a.join(" ")} ...');
     return
       switch tryToRun(cmd, params) {
-        case Success(v): 
+        case Success(v):
           println(' done');
           v;
         case Failure(code, out):
@@ -99,12 +100,12 @@ class Command {
           throw 'unreachable';
       }
   }
-  
-  function libInstalled(lib:String) 
+
+  function libInstalled(lib:String)
     return tryToRun('haxelib', ['path', lib]).match(Success(_));
-  
+
   function installLib(lib:String, ?version = '') {
-    
+
     foldOutput('installLib-$lib', function() {
       if (!libInstalled(lib))
       switch version {
@@ -115,7 +116,7 @@ class Command {
         }
     });
   }
-  
+
   function foldOutput<T>(tag:String, func:Void->T) {
     tag = tag.replace('+', 'plus');
     if(Travix.isTravis) Sys.println('travis_fold:start:$tag.${Travix.counter}');
@@ -123,22 +124,22 @@ class Command {
     if(Travix.isTravis) Sys.println('travis_fold:end:$tag.${Travix.counter}');
     return result;
   }
-  
+
   function ensureDir(dir:String) {
     var isDir = dir.extension() == '';
-    
+
     if (isDir)
       dir = dir.removeTrailingSlashes();
-      
+
     var parent = dir.directory();
     if (parent.removeTrailingSlashes() == dir) return;
     if (!parent.exists())
       ensureDir(parent);
-      
+
     if (isDir && !dir.exists())
       dir.createDirectory();
   }
-  
+
   function build(args:Array<String>, run) {
     args = args.concat(['-lib', 'travix']);
     switch Travix.getInfos() {
@@ -174,7 +175,7 @@ class Command {
 
     return false;
   }
-  
+
   #if (hxnodejs && !macro)
     static inline function command(cmd:String, ?args:Array<String>):Int {
       if (args == null)
@@ -183,18 +184,18 @@ class Command {
         return js.node.ChildProcess.spawnSync(cmd, args, cast {stdio: "inherit", shell: true }).status;
     }
   #end
-  
+
   function exec(cmd, ?args) {
     var a = [cmd];
     if (args != null)
       a = a.concat(args);
     println('> ' + a.join(' '));
     switch command(cmd, args) {
-      case 0: 
+      case 0:
       case v: exit(v);
     }
   }
-  
+
   function withCwd<T>(dir:String, f:Void->T) {
     var old = getCwd();
     setCwd(dir);
@@ -203,15 +204,38 @@ class Command {
     return ret;
   }
 
-  function aptGet(pckge:String, ?args:Array<String>) {
-    foldOutput('aptGet-$pckge', function() {
+  /**
+   * Installs software packages using a os-specific pacakge manager. "apt-get" on Linux and "brew" on MacOs.
+   *
+   * @param additionalArgs additional flags/options to be passed to the package manager
+   */
+  inline function installPackages(packageNames:Array<String>, ?additionalArgs:Array<String>) {
+    for (p in packageNames)
+      installPackage(p, additionalArgs);
+  }
+
+  /**
+   * Installs a software package using a os-specific pacakge manager. "apt-get" on Linux and "brew" on MacOs.
+   *
+   * @param additionalArgs additional flags/options to be passed to the package manager
+   */
+  function installPackage(packageName:String, ?additionalArgs:Array<String>) {
+    foldOutput('installPackage-$packageName', function() {
       switch Sys.systemName() {
         case 'Linux':
-          exec('sudo', ['apt-get', 'install', '-qq', pckge].concat(if (args == null) [] else args));
+          if (isFirstPackageInstallation) {
+            exec('apt-get', 'update');
+            isFirstPackageInstallation = false;
+          }
+          exec('sudo', ['apt-get', 'install', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
         case 'Mac':
-          exec('brew', ['install', pckge].concat(if (args == null) [] else args));
+          if (isFirstPackageInstallation) {
+            exec('brew', 'update'); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
+            isFirstPackageInstallation = false;
+          }
+          exec('brew', ['install', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
         case v:
-          println('Cannot run apt-get on $v');
+          println('WARN: Don\'t know how to install packages on $v');
         }
     });
   }
