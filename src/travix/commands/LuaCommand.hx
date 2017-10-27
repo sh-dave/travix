@@ -10,11 +10,16 @@ class LuaCommand extends Command {
           if(command('eval', ['bash -c "[ \\"`lsb_release -s -c`\\" == \\"precise\\" ]"']) == 0) {
             // Required repo for precise to build cmake
             exec('eval', ['sudo add-apt-repository -y ppa:george-edison55/precise-backports']);
-            exec('eval', ['sudo apt-get update']);
           }
 
-          for(pack in ["lua5.2","make","cmake","unzip","libpcre3","libpcre3-dev"])
-            aptGet(pack);
+          installPackages([
+            "cmake",
+            "libpcre3",
+            "libpcre3-dev",
+            "lua5.2",
+            "make",
+            "unzip"
+          ]);
 
           var luaRocksVersion = '2.4.2';
 
@@ -39,7 +44,7 @@ class LuaCommand extends Command {
           exec('rm', ['-f', 'luarocks-$luaRocksVersion.tar.gz']);
           exec('rm', ['-rf', 'luarocks-$luaRocksVersion']);
         } else if(Travix.isMac) {
-          aptGet('lua');
+          installPackage('lua');
         }
 
         // Install lua libraries
