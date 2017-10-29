@@ -222,7 +222,7 @@ class Command {
       switch Sys.systemName() {
         case 'Linux':
           if (isFirstPackageInstallation) {
-            exec('apt-get', ['update']);
+            exec('sudo', ['apt-get', 'update', '-qq']);
             isFirstPackageInstallation = false;
           }
           exec('sudo', ['apt-get', 'install', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
