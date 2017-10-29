@@ -5,12 +5,7 @@ language: haxe
 
 haxe:
   - "3.4.2"
-  # - development
-  
-# https://github.com/travis-ci/travis-ci/issues/7754#issuecomment-301223128
-# matrix:
-#   allow_failures:
-#     - haxe: development
+  - development
 
 install:
   - haxelib dev travix .
@@ -39,6 +34,8 @@ w3vVk1hGdITEk6U+C/5Y7QpsulBySKd+Q6XoH8m6fSbgWhGdqhi8w4lE6E25XWl2Cbdi/SNbcGJZpgeM
 JQJWxP1AEJmFZsNzbEyry8xWV2t2B2PZ8fbqXBcbX1PtliT9AHq3fsd8zRNjmRslkYveopRyLUg8E5c="
 
 jobs:
+  allow_failures:
+    - haxe: development
   include:
     - stage: deploy
       os: linux
