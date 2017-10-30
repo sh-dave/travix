@@ -4,6 +4,8 @@ import Sys.*;
 
 class FlashCommand extends Command {
 
+  var flashPlayerVersion = 27;
+  
   override function execute() {
 
     // if we are not on Linux we only compile but do not run the tests
@@ -32,7 +34,7 @@ class FlashCommand extends Command {
 
       // Download and unpack the player, unless it exists already
       if (command("eval", ['test -f "$flashPath/flashplayerdebugger"']) != 0) {
-        exec('eval', ['wget -nv -O flash_player_sa_linux.tar.gz https://fpdownload.macromedia.com/pub/flashplayer/updaters/26/flash_player_sa_linux_debug.x86_64.tar.gz']);
+        exec('eval', ['wget -nv -O flash_player_sa_linux.tar.gz https://fpdownload.macromedia.com/pub/flashplayer/updaters/$flashPlayerVersion/flash_player_sa_linux_debug.x86_64.tar.gz']);
         exec('eval', ['tar -C "$flashPath" -xf flash_player_sa_linux.tar.gz --wildcards "flashplayerdebugger"']);
         exec('eval', ['rm -f flash_player_sa_linux.tar.gz']);
 
