@@ -24,6 +24,7 @@ class PhpCommand extends Command {
           if (phpInstallationRequired) {
             installPackage('software-properties-common');  // ensure 'add-apt-repository' command is present
             exec('sudo', ['add-apt-repository', '-y', 'ppa:ondrej/php']);
+            exec('sudo', ['apt-get', 'update']);
             installPackages([
               phpPackage + "-cli",
               phpPackage + "-mbstring",
