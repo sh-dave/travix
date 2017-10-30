@@ -4,19 +4,30 @@ import Sys.*;
 
 class PhpCommand extends Command {
 
-  var phpVersionPattern:EReg = new EReg("PHP 5\\.*","");
+  var isPHP7Required:Bool;
+
+  var phpVersionPattern:EReg = new EReg("PHP 5\\.*", "");
+
+  public function new(cmd, args, isPHP7Required) {
+    super(cmd, args);
+    this.isPHP7Required = isPHP7Required;
+  }
 
   override function execute() {
+
+    var haxeMajorVersion = Std.parseInt(run("haxe", ["-version"]).split(".")[0]);
+    if(haxeMajorVersion > 3)
+        isPHP7Required = true;
 
     var phpCmd:String = null;
     var phpPackage:String = null;
     var phpInstallationRequired = false;
 
-    foldOutput('php-install', function() {
+    foldOutput("php-install", function() {
       switch Sys.systemName() {
-        case 'Linux':
-          phpCmd = 'php5.6';
-          phpPackage = 'php5.6';
+        case "Linux":
+          phpCmd     = isPHP7Required ? "php7.1" : "php5.6";
+          phpPackage = isPHP7Required ? "php7.1" : "php5.6";
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -34,7 +45,7 @@ class PhpCommand extends Command {
           }
         case 'Mac':
           phpCmd = 'php';
-          phpPackage = 'php56';
+          phpPackage = isPHP7Required ? "php71" : "php56";
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -55,7 +66,7 @@ class PhpCommand extends Command {
       exec(phpCmd, ['--version']);
     });
 
-    build(['-php', 'bin/php'], function () {
+    build(isPHP7Required ? ['-php', 'bin/php', '-D', 'php7'] : ['-php', 'bin/php'], function () {
       exec(phpCmd, ['-d', 'xdebug.max_nesting_level=9999', 'bin/php/index.php']);
     });
 
