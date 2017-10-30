@@ -6,8 +6,6 @@ class PhpCommand extends Command {
 
   var isPHP7Required:Bool;
 
-  var phpVersionPattern:EReg = new EReg("PHP 5\\.*", "");
-
   public function new(cmd, args, isPHP7Required) {
     super(cmd, args);
     this.isPHP7Required = isPHP7Required;
@@ -22,6 +20,7 @@ class PhpCommand extends Command {
     var phpCmd:String = null;
     var phpPackage:String = null;
     var phpInstallationRequired = false;
+    var phpVersionPattern:EReg = new EReg(isPHP7Required ? "PHP 7\\.*" : "PHP 5\\.*", "");
 
     foldOutput("php-install", function() {
       switch Sys.systemName() {
