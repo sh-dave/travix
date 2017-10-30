@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Add php7 support. Fix flash issues with xvfb. Many other fixes.",
-	"version": "0.10.0",
+	"releasenote": "Fix travis homebrew plus some internal refactor",
+	"version": "0.10.1",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
