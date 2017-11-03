@@ -225,7 +225,7 @@ class Command {
             exec('sudo', ['apt-get', 'update', '-qq']);
             isFirstPackageInstallation = false;
           }
-          exec('sudo', ['apt-get', 'install', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
+          exec('sudo', ['apt-get', 'install', '--no-install-recommends', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
         case 'Mac':
           if (isFirstPackageInstallation) {
             exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
