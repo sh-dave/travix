@@ -47,7 +47,8 @@ class FlashCommand extends Command {
           "libx11-6",
           "libxcursor1",
           "libxext6",
-          "libxt6"
+          "libxt6",
+          "xvfb"
         ]);
       }
 
@@ -61,7 +62,7 @@ class FlashCommand extends Command {
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;
       for(i in 1 ... 8) {
-        if(command('eval', ['xvfb-run -a "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
+        if(command('eval', ['xvfb-run -e /dev/stdout -a "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
           ok = true; break;
         }
       }
