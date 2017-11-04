@@ -62,7 +62,7 @@ class FlashCommand extends Command {
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;
       for(i in 1 ... 8) {
-        if(command('eval', ['xvfb-run -e /dev/stdout -a "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
+        if(command('eval', ['xvfb-run -e /dev/null -a --server-args="-ac -screen 0 1024x768x24 +extension RANDR" "$flashPath/flashplayerdebugger" bin/swf/tests.swf']) == 0) {
           ok = true; break;
         }
       }
