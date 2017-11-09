@@ -1,4 +1,5 @@
 # Travix - Travis CI helper for Haxe
+[![Build Status](https://travis-ci.org/back2dos/travix.svg?branch=master)](https://travis-ci.org/back2dos/travix)
 
 Are you tired of setting up Travis CI for all your projects? Then `travix` is for you! \o/
 
