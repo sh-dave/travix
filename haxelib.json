@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Fix travis homebrew plus some internal refactor",
-	"version": "0.10.2",
+	"releasenote": "Removed the annoying trace",
+	"version": "0.10.3",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }

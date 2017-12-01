@@ -1,6 +1,6 @@
 {
   "name": "haxe-travix",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "bin": {
     "travix": "bin/travix.js"
   },
