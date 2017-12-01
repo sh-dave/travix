@@ -145,7 +145,7 @@ class Command {
       case Some(info): args = args.concat(['-lib', info.name]);
     }
     if(Travix.TESTS.exists()) args.push(Travix.TESTS);
-    trace(args.concat(this.args));
+    
     foldOutput('build-$cmd', exec.bind('haxe', args.concat(this.args)));
     run();
   }
