@@ -15,7 +15,7 @@
 		"ciscoheat"
 	],
 	"releasenote": "Fix travis homebrew plus some internal refactor",
-	"version": "0.10.1",
+	"version": "0.10.2",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
