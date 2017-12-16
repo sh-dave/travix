@@ -21,7 +21,7 @@ class LuaCommand extends Command {
             "unzip"
           ]);
 
-          var luaRocksVersion = '2.4.2';
+          var luaRocksVersion = '2.4.3';
 
           // Add source files so luarocks can be compiled
           exec('sudo', ['mkdir', '-p', '/usr/include/lua/5.2']);
@@ -49,8 +49,8 @@ class LuaCommand extends Command {
 
         // Install lua libraries
         // Based on https://github.com/HaxeFoundation/haxe/blob/3a6d024019aad28ab138fbb88cade34ff2e5bf19/tests/RunCi.hx#L473
-        exec('eval', ['sudo luarocks install lrexlib-pcre 2.7.2-1']);  // pinning to 2.7.2-1 because of https://github.com/rrthomas/lrexlib/issues/20
-        exec('eval', ['sudo luarocks install luv 1.9.1-0']);
+        exec('eval', ['sudo luarocks install lrexlib-pcre 2.9.0-1']);
+        exec('eval', ['sudo luarocks install luv 1.9.1-1']);
         exec('eval', ['sudo luarocks install luasocket 3.0rc1-2']);
         exec('eval', ['sudo luarocks install environ 0.1.0-1']);
       });
