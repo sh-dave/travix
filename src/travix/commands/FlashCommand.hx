@@ -4,7 +4,7 @@ import Sys.*;
 
 class FlashCommand extends Command {
 
-  var flashPlayerVersion = 27;
+  var flashPlayerVersion = 28;
   
   override function execute() {
 
