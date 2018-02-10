@@ -2,6 +2,8 @@ package travix.commands;
 
 import Sys.*;
 
+using StringTools;
+
 class CppCommand extends Command {
 
   override function execute() {
@@ -25,7 +27,9 @@ class CppCommand extends Command {
 
     build(['-cpp', 'bin/cpp'], function () {
       var outputFile = main + (isDebugBuild() ? '-debug' : '') + (Travix.isWindows ? '.exe' : '');
-      exec('./bin/cpp/$outputFile');
+      var path = './bin/cpp/$outputFile';
+      if(Travix.isWindows) path = path.replace('/', '\\');
+      exec(path);
     });
   }
 
