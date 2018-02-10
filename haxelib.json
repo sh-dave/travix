@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Removed the annoying trace",
-	"version": "0.10.3",
+	"releasenote": "Updated Lua dependencies, Flash player version. Fixed hxcpp output path on Windows",
+	"version": "0.10.4",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
