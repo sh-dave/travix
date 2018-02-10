@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Updated Lua dependencies, Flash player version. Fixed hxcpp output path on Windows",
-	"version": "0.10.4",
+	"releasenote": "Fix cpp executable path on Windows",
+	"version": "0.10.5",
 	"url": "http://github.com/back2dos/travix/",
 	"dependencies": {}
 }
