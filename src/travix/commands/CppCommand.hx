@@ -24,7 +24,7 @@ class CppCommand extends Command {
     else installLib('hxcpp');
 
     build(['-cpp', 'bin/cpp'], function () {
-      var outputFile = main + (isDebugBuild() ? '-debug' : '');
+      var outputFile = main + (isDebugBuild() ? '-debug' : '') + (Travix.isWindows ? '.exe' : '');
       exec('./bin/cpp/$outputFile');
     });
   }
