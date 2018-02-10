@@ -21,7 +21,7 @@ class NodeCommand extends Command {
     installLib('hxnodejs');
     
     build(['-js', 'bin/node/tests.js', '-lib', 'hxnodejs'], function () {
-      if(Travix.isTravis && 'bin/node/package.json'.exists()) {
+      if(Travix.isCI && 'bin/node/package.json'.exists()) {
         foldOutput('npm-install', withCwd.bind('bin/node', exec.bind('npm', ['install'])));
       }
       exec('node', ['bin/node/tests.js']);

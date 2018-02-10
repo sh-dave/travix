@@ -24,6 +24,8 @@ class Travix {
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
   public static var isTravis = getEnv('TRAVIS') == 'true';
+  public static var isAppVeyor = getEnv('APPVEYOR') == 'True';
+  public static var isCI = getEnv('CI') != null;
   
   // repeated calls, but ok...
   public static var isLinux = systemName() == 'Linux';
