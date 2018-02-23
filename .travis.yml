@@ -9,6 +9,8 @@ haxe:
 
 install:
   - haxelib dev travix .
+  - haxelib git tink_io https://github.com/haxetink/tink_io pure
+  - haxelib git tink_cli https://github.com/haxetink/tink_cli pure
   - haxe build-neko.hxml
   - haxelib run travix install
   
