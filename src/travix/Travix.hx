@@ -246,6 +246,7 @@ class Travix {
     var command = new PhpCommand(false);
     command.install();
     command.buildAndRun(rest);
+    command.uninstall();
   }
   
   /**
@@ -256,6 +257,7 @@ class Travix {
     var command = new PhpCommand(true);
     command.install();
     command.buildAndRun(rest);
+    command.uninstall();
   }
   
   /**
