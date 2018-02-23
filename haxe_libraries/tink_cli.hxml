@@ -1,6 +1,6 @@
-# @install: lix --silent download "https://github.com/haxetink/tink_cli/archive/0c9507741b89e86e7c7a72933899bbdad1aef895.tar.gz" into tink_cli/0.2.1/github/0c9507741b89e86e7c7a72933899bbdad1aef895
+# @install: lix --silent download "https://github.com/haxetink/tink_cli/archive/5a9b047228b0688f85f48c2b95b68e9a0a6094ca.tar.gz" into tink_cli/0.2.1/github/5a9b047228b0688f85f48c2b95b68e9a0a6094ca
 -D tink_cli=0.2.1
--cp ${HAXESHIM_LIBCACHE}/tink_cli/0.2.1/github/0c9507741b89e86e7c7a72933899bbdad1aef895/src
+-cp ${HAXESHIM_LIBCACHE}/tink_cli/0.2.1/github/5a9b047228b0688f85f48c2b95b68e9a0a6094ca/src
 # Make sure docs are generated
 -D use-rtti-doc
 -lib tink_io
