@@ -10,16 +10,9 @@ using sys.io.File;
 
 class Command {
 
-  var cmd:String;
-  var args:Array<String>;
   var isFirstPackageInstallation = true;
 
-  public function new(cmd, args) {
-    this.cmd = cmd;
-    this.args = args;
-  }
-
-  public function execute(){}
+  public function new() {}
 
   function enter(what:String, ?def:String)
     switch def {
@@ -138,7 +131,7 @@ class Command {
       dir.createDirectory();
   }
 
-  function build(args:Array<String>, run) {
+  function build(tag, args:Array<String>, run) {
     args = args.concat(['-lib', 'travix']);
     switch Travix.getInfos() {
       case None: // do nothing
@@ -146,11 +139,11 @@ class Command {
     }
     if(Travix.TESTS.exists()) args.push(Travix.TESTS);
     
-    foldOutput('build-$cmd', exec.bind('haxe', args.concat(this.args)));
+    foldOutput('build-$tag', exec.bind('haxe', args));
     run();
   }
 
-  function isDebugBuild():Bool {
+  function isDebugBuild(args:Array<String>):Bool {
     function declaresDebugFlag(file:String):Bool {
       for (line in file.getContent().split('\n').map(function (s:String) return s.split('#')[0].trim())) {
         if (line == '-debug')

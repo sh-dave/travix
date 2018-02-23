@@ -3,4 +3,6 @@
 -main travix.Travix 
 -js bin/travix.js
 
+-lib tink_cli
+
 --macro travix.Macro.shebang()

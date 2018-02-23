@@ -94,29 +94,8 @@ class Travix {
     
     if(Sys.getEnv('HAXELIB_RUN') == '1')
       Sys.setCwd(args.pop());
-    
-    var cmd = args.shift();
-    var command:Command = switch cmd {
-      case null | 'help': new HelpCommand(cmd, args);
-      case 'install': new InstallCommand(cmd, args);
-      case 'init': new InitCommand(cmd, args);
-      case 'auth': new AuthCommand(cmd, args);
-      case 'release': new ReleaseCommand(cmd, args);
-      case 'interp': new InterpCommand(cmd, args);
-      case 'neko': new NekoCommand(cmd, args);
-      case 'node': new NodeCommand(cmd, args);
-      case 'js': new JsCommand(cmd, args);
-      case 'java': new JavaCommand(cmd, args);
-      case 'flash': new FlashCommand(cmd, args);
-      case 'cpp': new CppCommand(cmd, args);
-      case 'php': new PhpCommand(cmd, args, false);
-      case 'php7': new PhpCommand(cmd, args, true);
-      case 'python': new PythonCommand(cmd, args);
-      case 'cs': new CsCommand(cmd, args);
-      case 'lua': new LuaCommand(cmd, args);
-      case v: die('Unknown command $v');
-    }
-    command.execute();
+      
+    tink.Cli.process(args, new Travix()).handle(tink.Cli.exit);
   }
 
   static function incrementCounter()
@@ -124,5 +103,15 @@ class Travix {
       counter = TRAVIX_COUNTER.exists() ? Std.parseInt(TRAVIX_COUNTER.getContent()) : 0;
       TRAVIX_COUNTER.saveContent(Std.string(counter+1));
     }
+    
+  function new() {}
+  
+  @:defaultCommand
+  public function help() {
+    trace('todo');
+  }
+  
+  @:command public var install = new InstallCommand();
+  @:command public var run = new RunCommand();
 }
 

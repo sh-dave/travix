@@ -1,9 +1,9 @@
 package travix.commands;
 
-class CsCommand extends Command {
-
-  override function execute() {
-
+class InstallCsCommand extends Command {
+  @:defaultCommand
+  public function doIt() {
+    trace('install cs');
     if (Travix.isMac) {
 
       installPackage('mono');
@@ -28,17 +28,5 @@ class CsCommand extends Command {
       // print the effective mono version
       exec('mono', ['-V']);
     }
-
-    var main = Travix.getMainClassLocalName();
-
-    installLib('hxcs');
-
-    build(['-cs', 'bin/cs/'], function () {
-      var outputFile = main + (isDebugBuild() ? '-Debug' : '');
-      if (Travix.isWindows)
-        exec('bin\\cs\\bin\\$outputFile.exe');
-      else
-        exec('mono', ['bin/cs/bin/$outputFile.exe']);
-    });
   }
 }
