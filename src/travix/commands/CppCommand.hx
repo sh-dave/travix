@@ -1,21 +1,23 @@
 package travix.commands;
 
+import tink.cli.Rest;
 import Sys.*;
 
 using StringTools;
 
 class CppCommand extends Command {
 
-  override function execute() {
-    var main = Travix.getMainClassLocalName();
-
+  public function install() {
     if (getEnv('TRAVIS_HAXE_VERSION') == 'development') {
-
       if(Travix.isLinux) {
           installPackage('gcc-multilib');
           installPackage('g++-multilib');
       }
+    }
+  }
 
+  public function buildAndRun(rest:Rest<String>) {
+    if (getEnv('TRAVIS_HAXE_VERSION') == 'development') {
       if (!libInstalled('hxcpp')) {
         foldOutput('git-hxcpp', function() {
           exec('haxelib', ['git', 'hxcpp', 'https://github.com/HaxeFoundation/hxcpp.git']);
@@ -24,9 +26,10 @@ class CppCommand extends Command {
       }
     }
     else installLib('hxcpp');
-
-    build(['-cpp', 'bin/cpp'], function () {
-      var outputFile = main + (isDebugBuild() ? '-debug' : '') + (Travix.isWindows ? '.exe' : '');
+    
+    var main = Travix.getMainClassLocalName();
+    build('cpp', ['-cpp', 'bin/cpp'].concat(rest), function () {
+      var outputFile = main + (isDebugBuild(rest) ? '-debug' : '') + (Travix.isWindows ? '.exe' : '');
       var path = './bin/cpp/$outputFile';
       if(Travix.isWindows) path = path.replace('/', '\\');
       exec(path);

@@ -1,9 +1,11 @@
 package travix.commands;
 
-class InstallCsCommand extends Command {
-  @:defaultCommand
-  public function doIt() {
-    trace('install cs');
+import tink.cli.Rest;
+
+class CsCommand extends Command {
+
+  public function install() {
+
     if (Travix.isMac) {
 
       installPackage('mono');
@@ -28,5 +30,20 @@ class InstallCsCommand extends Command {
       // print the effective mono version
       exec('mono', ['-V']);
     }
+  }
+  
+  public function buildAndRun(rest:Rest<String>) {
+
+    var main = Travix.getMainClassLocalName();
+
+    installLib('hxcs');
+
+    build('cs', ['-cs', 'bin/cs/'].concat(rest), function () {
+      var outputFile = main + (isDebugBuild(rest) ? '-Debug' : '');
+      if (Travix.isWindows)
+        exec('bin\\cs\\bin\\$outputFile.exe');
+      else
+        exec('mono', ['bin/cs/bin/$outputFile.exe']);
+    });
   }
 }

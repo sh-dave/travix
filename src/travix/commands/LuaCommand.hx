@@ -1,9 +1,12 @@
 package travix.commands;
 
+import tink.cli.Rest;
+
 import Sys.*;
 
 class LuaCommand extends Command {
-  override function execute() {
+  
+  public function install() {
     if(command('eval', ['which luarocks >/dev/null']) != 0) {
       foldOutput('lua-install', function() {
         if(Travix.isLinux) {
@@ -59,8 +62,10 @@ class LuaCommand extends Command {
     // print the effective versions
     exec("luarocks", ['--version']);
     exec("lua", ['-v']);
+  }
 
-    build(['-lua', 'bin/lua/tests.lua'], function () {
+  public function buildAndRun(rest:Rest<String>) {
+    build('lua', ['-lua', 'bin/lua/tests.lua'].concat(rest), function () {
       exec('lua', ['bin/lua/tests.lua']);
     });
   }

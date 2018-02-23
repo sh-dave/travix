@@ -4,9 +4,6 @@ import travix.*;
 
 class InstallCommand extends Command {
   
-  @:command public var cs = new InstallCsCommand();
-  @:command public var node = new InstallNodeCommand();
-  
 	static inline var TESTS = @:privateAccess Travix.TESTS;
   
   @:defaultCommand
@@ -30,4 +27,52 @@ class InstallCommand extends Command {
         exec('haxelib', ['list']);
     }
   }
+  
+  @:command
+  public function cs()
+    new CsCommand().install();
+  
+  @:command
+  public function node()
+    new NodeCommand().install();
+  
+  @:command
+  public function cpp()
+    new CppCommand().install();
+  
+  @:command
+  public function flash()
+    new FlashCommand().install();
+  
+  @:command
+  public function interp()
+    new InterpCommand().install();
+  
+  @:command
+  public function java()
+    new JavaCommand().install();
+  
+  @:command
+  public function js()
+    new JsCommand().install();
+  
+  @:command
+  public function lua()
+    new LuaCommand().install();
+  
+  @:command
+  public function neko()
+    new NekoCommand().install();
+  
+  @:command
+  public function php()
+    new PhpCommand(false).install();
+  
+  @:command
+  public function php7()
+    new PhpCommand(true).install();
+  
+  @:command
+  public function python()
+    new PythonCommand().install();
 }

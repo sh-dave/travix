@@ -1,32 +1,31 @@
 package travix.commands;
 
+import tink.cli.Rest;
 import Sys.*;
 
 class PhpCommand extends Command {
 
   var isPHP7Required:Bool;
 
-  public function new(cmd, args, isPHP7Required) {
-    super(cmd, args);
+  public function new(isPHP7Required) {
+    super();
     this.isPHP7Required = isPHP7Required;
   }
 
-  override function execute() {
+  public function install() {
 
     var haxeMajorVersion = Std.parseInt(run("haxe", ["-version"]).split(".")[0]);
     if(haxeMajorVersion > 3)
         isPHP7Required = true;
 
-    var phpCmd:String = null;
-    var phpPackage:String = null;
+    var phpCmd:String = getPhpCommand();
+    var phpPackage:String = getPhpPackage();
     var phpInstallationRequired = false;
     var phpVersionPattern:EReg = new EReg(isPHP7Required ? "PHP 7\\.*" : "PHP 5\\.*", "");
 
     foldOutput("php-install", function() {
       switch Sys.systemName() {
         case "Linux":
-          phpCmd     = isPHP7Required ? "php7.1" : "php5.6";
-          phpPackage = isPHP7Required ? "php7.1" : "php5.6";
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -43,8 +42,6 @@ class PhpCommand extends Command {
             ], [ "--allow-unauthenticated" ]);
           }
         case 'Mac':
-          phpCmd = 'php';
-          phpPackage = isPHP7Required ? "php71" : "php56";
           switch(tryToRun(phpCmd, ['--version'])) {
             case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
             case Failure(_):   phpInstallationRequired = true;
@@ -55,7 +52,6 @@ class PhpCommand extends Command {
             installPackage(phpPackage, ['--without-apache', '--without-snmp']);
           }
         case v:
-          phpCmd = 'php';
           if (tryToRun(phpCmd, ['--version']).match(Failure(_, _))) {
             println('[ERROR] Don\'t know how to install PHP on $v');
             exit(1);
@@ -65,17 +61,40 @@ class PhpCommand extends Command {
       // print the effective PHP version
       exec(phpCmd, ['--version']);
     });
+  }
 
-    build(isPHP7Required ? ['-php', 'bin/php', '-D', 'php7'] : ['-php', 'bin/php'], function () {
+  public function buildAndRun(rest:Rest<String>) {
+    var phpCmd = getPhpCommand();
+    
+    build(isPHP7Required ? 'php7' : 'php', (isPHP7Required ? ['-php', 'bin/php', '-D', 'php7'] : ['-php', 'bin/php']).concat(rest), function () {
       exec(phpCmd, ['-d', 'xdebug.max_nesting_level=9999', 'bin/php/index.php']);
     });
 
+  }
+  
+  public function uninstall() {
+    var phpPackage = getPhpPackage();
     // removing PHP to be able to run another PhpCommand that may need another PHP version
-    if (phpInstallationRequired) foldOutput('php-uninstall', function() {
+    foldOutput('php-uninstall', function() {
       switch Sys.systemName() {
         case 'Linux': exec('sudo', ['apt-get', '-q', '-y', 'remove', phpPackage]);
         case 'Mac':  exec('brew', ['remove', phpPackage]);
       }
     });
+  }
+  
+  function getPhpCommand() {
+    return switch Sys.systemName() {
+        case "Linux": isPHP7Required ? "php7.1" : "php5.6";
+        case _: 'php';
+    }
+  }
+  
+  function getPhpPackage() {
+    return switch Sys.systemName() {
+      case "Linux": isPHP7Required ? "php7.1" : "php5.6";
+      case 'Mac': isPHP7Required ? "php71" : "php56";
+      case v: Travix.die('[ERROR] Don\'t know how to install PHP on $v');
+    }
   }
 }

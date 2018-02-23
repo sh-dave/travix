@@ -1,9 +1,15 @@
 package travix.commands;
 
+import tink.cli.Rest;
+
 class PythonCommand extends Command {
 
-  override function execute() {
-    build(['-python', 'bin/python/tests.py'], function () {
+  public function install() {
+    
+  }
+
+  public function buildAndRun(rest:Rest<String>) {
+    build('python', ['-python', 'bin/python/tests.py'].concat(rest), function () {
       if (tryToRun('python3', ['--version']).match(Failure(_, _))) {
         installPackage('python3');
       }

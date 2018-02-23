@@ -1,11 +1,14 @@
 package travix.commands;
 
-class InstallNodeCommand extends Command {
+import tink.cli.Rest;
+
+using sys.FileSystem;
+
+class NodeCommand extends Command {
   
   static var VERSION_RE = ~/^v?(\d{1,})\.\d{1,}\.\d{1,}$/;
   
-  @:defaultCommand
-  public function doIt() {
+  public function install() {
     if (Travix.isTravis && Travix.isMac) {
         // TODO: remove this when travis decided to update their stock node version
         foldOutput('upgrade-nodejs', function() {
@@ -17,5 +20,16 @@ class InstallNodeCommand extends Command {
           }
         });
     }
+  }
+
+  public function buildAndRun(rest:Rest<String>) {
+    installLib('hxnodejs');
+    
+    build('node', ['-js', 'bin/node/tests.js', '-lib', 'hxnodejs'].concat(rest), function () {
+      if(Travix.isCI && 'bin/node/package.json'.exists()) {
+        foldOutput('npm-install', withCwd.bind('bin/node', exec.bind('npm', ['install'])));
+      }
+      exec('node', ['bin/node/tests.js']);
+    });
   }
 }
