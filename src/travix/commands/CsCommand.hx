@@ -1,8 +1,10 @@
 package travix.commands;
 
+import tink.cli.Rest;
+
 class CsCommand extends Command {
 
-  override function execute() {
+  public function install() {
 
     if (Travix.isMac) {
 
@@ -28,13 +30,16 @@ class CsCommand extends Command {
       // print the effective mono version
       exec('mono', ['-V']);
     }
+  }
+  
+  public function buildAndRun(rest:Rest<String>) {
 
     var main = Travix.getMainClassLocalName();
 
     installLib('hxcs');
 
-    build(['-cs', 'bin/cs/'], function () {
-      var outputFile = main + (isDebugBuild() ? '-Debug' : '');
+    build('cs', ['-cs', 'bin/cs/'].concat(rest), function () {
+      var outputFile = main + (isDebugBuild(rest) ? '-Debug' : '');
       if (Travix.isWindows)
         exec('bin\\cs\\bin\\$outputFile.exe');
       else

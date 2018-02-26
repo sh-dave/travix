@@ -20,7 +20,8 @@ class InitCommand extends Command {
 	static inline var TESTS = @:privateAccess Travix.TESTS;
   static inline var HAXELIB_CONFIG = @:privateAccess Travix.HAXELIB_CONFIG;
 	
-	override function execute() {
+  @:defaultCommand
+	public function doIt() {
     var source = Unknown;
     switch tryToRun('git', ['config', '--get', 'remote.origin.url']) {
       case Success(url):

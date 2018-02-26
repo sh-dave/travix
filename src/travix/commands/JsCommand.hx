@@ -1,20 +1,22 @@
 package travix.commands;
 
+import tink.cli.Rest;
+
 using sys.io.File;
 using sys.FileSystem;
 
 class JsCommand extends Command {
 
+  static var phantomjsVersion = "phantomjs-2.1.1-linux-x86_64";
+  static var phantomjsBinPath = '$phantomjsVersion/bin/phantomjs';
 
-  override function execute() {
-
-    var phantomjs = 'phantomjs';
+  public function install() {
 
     if(Travix.isTravis) {
       if(Travix.isMac) {
         installPackage('phantomjs');
       } else if(Travix.isLinux) {
-        var PHANTOM_JS = "phantomjs-2.1.1-linux-x86_64";
+        var phantomjsVersion = "phantomjs-2.1.1-linux-x86_64";
 
         foldOutput('phantomjs-update', function() {
           installPackages([
@@ -28,21 +30,23 @@ class JsCommand extends Command {
             'libxft-dev'
           ]);
 
-          exec('wget', ['https://github.com/Medium/phantomjs/releases/download/v2.1.1/$PHANTOM_JS.tar.bz2']);
-          exec('tar', ['xvjf', '$PHANTOM_JS.tar.bz2']);
+          exec('wget', ['https://github.com/Medium/phantomjs/releases/download/v2.1.1/$phantomjsVersion.tar.bz2']);
+          exec('tar', ['xvjf', '$phantomjsVersion.tar.bz2']);
 
-          phantomjs = '$PHANTOM_JS/bin/phantomjs';
         });
       }
     }
+  }
 
-    build(['-js', 'bin/js/tests.js'], function () {
+  public function buildAndRun(rest:Rest<String>) {
+
+    build('js', ['-js', 'bin/js/tests.js'].concat(rest), function () {
       var index = 'bin/js/index.html';
       if(!index.exists()) index.saveContent(defaultIndexHtml());
       var runPhantom = 'bin/js/runPhantom.js';
       if(!runPhantom.exists()) runPhantom.saveContent(defaultPhantomScript());
-      exec(phantomjs, ['-v']);
-      exec(phantomjs, ['--web-security=no', runPhantom]);
+      exec(phantomjsBinPath, ['-v']);
+      exec(phantomjsBinPath, ['--web-security=no', runPhantom]);
     });
   }
 

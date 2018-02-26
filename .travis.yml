@@ -4,11 +4,13 @@ dist: trusty
 language: haxe
 
 haxe:
-  - "3.4.2"
+  - "3.4.7"
   - development
 
 install:
   - haxelib dev travix .
+  - haxelib git tink_io https://github.com/haxetink/tink_io pure
+  - haxelib git tink_cli https://github.com/haxetink/tink_cli pure
   - haxe build-neko.hxml
   - haxelib run travix install
   
@@ -17,6 +19,7 @@ script:
   - haxelib run travix js
   - haxelib run travix flash
   - haxelib run travix php
+  - haxelib run travix php7
   - haxelib run travix node
   - haxelib run travix neko
   - haxelib run travix python

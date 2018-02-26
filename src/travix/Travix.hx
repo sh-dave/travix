@@ -7,6 +7,7 @@ import haxe.ds.Option;
 import sys.io.*;
 import Sys.*;
 import travix.commands.*;
+import tink.cli.Rest;
 
 using StringTools;
 using haxe.io.Path;
@@ -23,6 +24,7 @@ class Travix {
   static inline var TRAVIX_COUNTER = '.travix_counter';
   static inline var HAXELIB_CONFIG = 'haxelib.json';
   
+  // env
   public static var isTravis = getEnv('TRAVIS') == 'true';
   public static var isAppVeyor = getEnv('APPVEYOR') == 'True';
   public static var isCI = getEnv('CI') != null;
@@ -94,29 +96,8 @@ class Travix {
     
     if(Sys.getEnv('HAXELIB_RUN') == '1')
       Sys.setCwd(args.pop());
-    
-    var cmd = args.shift();
-    var command:Command = switch cmd {
-      case null | 'help': new HelpCommand(cmd, args);
-      case 'install': new InstallCommand(cmd, args);
-      case 'init': new InitCommand(cmd, args);
-      case 'auth': new AuthCommand(cmd, args);
-      case 'release': new ReleaseCommand(cmd, args);
-      case 'interp': new InterpCommand(cmd, args);
-      case 'neko': new NekoCommand(cmd, args);
-      case 'node': new NodeCommand(cmd, args);
-      case 'js': new JsCommand(cmd, args);
-      case 'java': new JavaCommand(cmd, args);
-      case 'flash': new FlashCommand(cmd, args);
-      case 'cpp': new CppCommand(cmd, args);
-      case 'php': new PhpCommand(cmd, args, false);
-      case 'php7': new PhpCommand(cmd, args, true);
-      case 'python': new PythonCommand(cmd, args);
-      case 'cs': new CsCommand(cmd, args);
-      case 'lua': new LuaCommand(cmd, args);
-      case v: die('Unknown command $v');
-    }
-    command.execute();
+      
+    tink.Cli.process(args, new Travix()).handle(tink.Cli.exit);
   }
 
   static function incrementCounter()
@@ -124,5 +105,169 @@ class Travix {
       counter = TRAVIX_COUNTER.exists() ? Std.parseInt(TRAVIX_COUNTER.getContent()) : 0;
       TRAVIX_COUNTER.saveContent(Std.string(counter+1));
     }
+    
+  function new() {}
+  
+  @:defaultCommand
+  public function help() {
+    // println(tink.Cli.getDoc(this));
+    
+    println('Commands');
+    println('  ');
+    println('  init - initializes a project with a .travis.yml');
+    println('  install - installs dependencies');
+    println('  interp - run tests on interpreter');
+    println('  neko - run tests on neko');
+    println('  node - run tests on nodejs (with hxnodejs)');
+    println('  js - run tests on js (with phantomjs)');
+    println('  php - run tests on php 5.x');
+    println('  php7 - run tests on php 7.x');
+    println('  java - run tests on java');
+    println('  flash - run tests on flash');
+    println('  python - run tests on python');
+    println('  cs - run tests on cs');
+    println('  cpp - run tests on cpp');
+    println('  lua - run tests on lua');
+  }
+  
+  @:command public var install = new InstallCommand();
+  @:command public var run = new RunCommand();
+  
+  /**
+   *  initializes a project with a .travis.yml
+   */
+  @:command 
+  public function init()
+    new InitCommand().doIt();
+    
+  @:command 
+  public function auth(rest:Rest<String>)
+    new AuthCommand().doIt(rest);
+    
+  @:command 
+  public function release(rest:Rest<String>)
+    new ReleaseCommand().doIt(rest);
+  
+  /**
+   *  run tests on cs
+   */
+  @:command
+  public function cs(rest:Rest<String>) {
+    var command = new CsCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on node
+   */
+  @:command
+  public function node(rest:Rest<String>) {
+    var command = new NodeCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on cpp
+   */
+  @:command
+  public function cpp(rest:Rest<String>) {
+    var command = new CppCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on flash
+   */
+  @:command
+  public function flash(rest:Rest<String>) {
+    var command = new FlashCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on interp
+   */
+  @:command
+  public function interp(rest:Rest<String>) {
+    var command = new InterpCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on java
+   */
+  @:command
+  public function java(rest:Rest<String>) {
+    var command = new JavaCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on js
+   */
+  @:command
+  public function js(rest:Rest<String>) {
+    var command = new JsCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on lua
+   */
+  @:command
+  public function lua(rest:Rest<String>) {
+    var command = new LuaCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on neko
+   */
+  @:command
+  public function neko(rest:Rest<String>) {
+    var command = new NekoCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+  
+  /**
+   *  run tests on php
+   */
+  @:command
+  public function php(rest:Rest<String>) {
+    var command = new PhpCommand(false);
+    command.install();
+    command.buildAndRun(rest);
+    command.uninstall();
+  }
+  
+  /**
+   *  run tests on php7
+   */
+  @:command
+  public function php7(rest:Rest<String>) {
+    var command = new PhpCommand(true);
+    command.install();
+    command.buildAndRun(rest);
+    command.uninstall();
+  }
+  
+  /**
+   *  run tests on python
+   */
+  @:command
+  public function python(rest:Rest<String>) {
+    var command = new PythonCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
 }
 

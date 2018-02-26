@@ -1,21 +1,20 @@
 package travix.commands;
 
+import tink.cli.Rest;
 import Sys.*;
 
 class FlashCommand extends Command {
 
-  var flashPlayerVersion = 28;
+  static var flashPlayerVersion = 28;
+  static var homePath = "$HOME";
+  static var flashPath = '$homePath/.macromedia/Flash_Player';
   
-  override function execute() {
+  public function install() {
 
-    // if we are not on Linux we only compile but do not run the tests
     if(!Travix.isLinux) {
-      build(['-swf', 'bin/swf/tests.swf'], function () {});
+      trace('Don\'t know how to install Flash on ' + systemName());
       return;
     }
-
-    var homePath = "$HOME";
-    var flashPath = '$homePath/.macromedia/Flash_Player';
 
     foldOutput('flash-install', function() {
       // Some xvfb settings
@@ -57,7 +56,10 @@ class FlashCommand extends Command {
     });
 
 
-    build(['-swf', 'bin/swf/tests.swf', '-D', 'flash-exit'], function () {
+  }
+
+  public function buildAndRun(rest:Rest<String>) {
+    build('flash', ['-swf', 'bin/swf/tests.swf', '-D', 'flash-exit'].concat(rest), function () {
       // The flash player has some issues with unexplained crashes,
       // but if it runs about 7 times, it should succeed one of those.
       var ok = false;

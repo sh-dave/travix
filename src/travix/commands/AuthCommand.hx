@@ -1,13 +1,14 @@
 package travix.commands;
 
-import sys.io.*;
+import tink.cli.Rest;
 
 class AuthCommand extends Command {
   
-  override function execute() {
+  @:defaultCommand
+  public function doIt(rest:Rest<String>) {
     if(!libInstalled('travix_auth')) {
       installLib('travix_auth');
     }
-    exec('haxelib', ['run', 'travix_auth'].concat(this.args));
+    exec('haxelib', ['run', 'travix_auth'].concat(rest));
   }
 }
