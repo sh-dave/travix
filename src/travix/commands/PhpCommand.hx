@@ -6,6 +6,7 @@ import Sys.*;
 class PhpCommand extends Command {
 
   var isPHP7Required:Bool;
+  var isPHPInstallationRequired:Bool;
 
   public function new(isPHP7Required) {
     super();
@@ -20,17 +21,16 @@ class PhpCommand extends Command {
 
     var phpCmd:String = getPhpCommand();
     var phpPackage:String = getPhpPackage();
-    var phpInstallationRequired = false;
     var phpVersionPattern:EReg = new EReg(isPHP7Required ? "PHP 7\\.*" : "PHP 5\\.*", "");
 
     foldOutput("php-install", function() {
       switch Sys.systemName() {
         case "Linux":
           switch(tryToRun(phpCmd, ['--version'])) {
-            case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
-            case Failure(_):   phpInstallationRequired = true;
+            case Success(out): isPHPInstallationRequired = !phpVersionPattern.match(out);
+            case Failure(_):   isPHPInstallationRequired = true;
           }
-          if (phpInstallationRequired) {
+          if (isPHPInstallationRequired) {
             installPackage('software-properties-common');  // ensure 'add-apt-repository' command is present
             exec('sudo', ['add-apt-repository', '-y', 'ppa:ondrej/php']);
             exec('sudo', ['apt-get', 'update']);
@@ -43,13 +43,14 @@ class PhpCommand extends Command {
           }
         case 'Mac':
           switch(tryToRun(phpCmd, ['--version'])) {
-            case Success(out): phpInstallationRequired = !phpVersionPattern.match(out);
-            case Failure(_):   phpInstallationRequired = true;
+            case Success(out): isPHPInstallationRequired = !phpVersionPattern.match(out);
+            case Failure(_):   isPHPInstallationRequired = true;
           }
-          if (phpInstallationRequired) {
-            exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
-            exec('brew', ['tap', 'homebrew/homebrew-php']);
-            installPackage(phpPackage, ['--without-apache', '--without-snmp']);
+          if (isPHPInstallationRequired) {
+            exec('brew', ['tap', 'ezzatron/brew-php']); // https://github.com/ezzatron/brew-php
+            exec('brew', ['install', 'brew-php']);
+            exec('brew', ['php', 'install', phpPackage]);
+            exec('brew', ['php', 'link', phpPackage]);
           }
         case v:
           if (tryToRun(phpCmd, ['--version']).match(Failure(_, _))) {
@@ -69,10 +70,12 @@ class PhpCommand extends Command {
     build(isPHP7Required ? 'php7' : 'php', (isPHP7Required ? ['-php', 'bin/php', '-D', 'php7'] : ['-php', 'bin/php']).concat(rest), function () {
       exec(phpCmd, ['-d', 'xdebug.max_nesting_level=9999', 'bin/php/index.php']);
     });
-
   }
   
   public function uninstall() {
+    if(!isPHPInstallationRequired)
+      return;
+
     var phpPackage = getPhpPackage();
     // removing PHP to be able to run another PhpCommand that may need another PHP version
     foldOutput('php-uninstall', function() {
@@ -85,8 +88,8 @@ class PhpCommand extends Command {
   
   function getPhpCommand() {
     return switch Sys.systemName() {
-        case "Linux": isPHP7Required ? "php7.1" : "php5.6";
-        case _: 'php';
+      case "Linux": isPHP7Required ? "php7.1" : "php5.6";
+      case _: 'php';
     }
   }
   
