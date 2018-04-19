@@ -128,6 +128,7 @@ class Travix {
     println('  cs - run tests on cs');
     println('  cpp - run tests on cpp');
     println('  lua - run tests on lua');
+    println('  hl - run tests on hashlink');
   }
   
   @:command public var install = new InstallCommand();
@@ -187,7 +188,17 @@ class Travix {
     command.install();
     command.buildAndRun(rest);
   }
-  
+
+  /**
+   *  run tests on hashlink
+   */
+  @:command
+  public function hl(rest:Rest<String>) {
+    var command = new HashLinkCommand();
+    command.install();
+    command.buildAndRun(rest);
+  }
+
   /**
    *  run tests on interp
    */
