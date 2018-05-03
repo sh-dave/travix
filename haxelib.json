@@ -2,7 +2,6 @@
 	"name": "travix",
 	"description": "Travis helper for Haxe",
 	"classPath": "src",
-	"dependencies": {},
 	"url": "http://github.com/back2dos/travix/",
 	"contributors": [
 		"back2dos",
@@ -17,5 +16,8 @@
 		"build",
 		"tool"
 	],
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies":{
+		"tink_cli": ""
+	}
 }
