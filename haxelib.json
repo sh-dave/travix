@@ -17,6 +17,7 @@
 		"tool"
 	],
 	"license": "MIT",
+	"postDownload": "lix download && haxe build-neko.hxml",
 	"dependencies":{
 		"tink_cli": ""
 	}
