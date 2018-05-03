@@ -1,21 +1,21 @@
 {
 	"name": "travix",
-	"license": "MIT",
+	"description": "Travis helper for Haxe",
+	"classPath": "src",
+	"dependencies": {},
+	"url": "http://github.com/back2dos/travix/",
+	"contributors": [
+		"back2dos",
+		"kevinresol",
+		"ciscoheat"
+	],
+	"version": "0.11.0",
+	"releasenote": "Hashlink support. Fix PHP and Python on OSX.",
 	"tags": [
 		"ci",
 		"travis",
 		"build",
 		"tool"
 	],
-	"classPath": "src",
-	"description": "Travis helper for Haxe",
-	"contributors": [
-		"back2dos",
-		"kevinresol",
-		"ciscoheat"
-	],
-	"releasenote": "Fix cpp executable path on Windows",
-	"version": "0.10.5",
-	"url": "http://github.com/back2dos/travix/",
-	"dependencies": {}
+	"license": "MIT"
 }
