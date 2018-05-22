@@ -1,24 +1,24 @@
 {
 	"name": "travix",
-	"description": "Travis helper for Haxe",
-	"classPath": "src",
-	"url": "http://github.com/back2dos/travix/",
-	"contributors": [
-		"back2dos",
-		"kevinresol",
-		"ciscoheat"
-	],
-	"version": "0.11.0",
-	"releasenote": "Hashlink support. Fix PHP and Python on OSX.",
+	"license": "MIT",
 	"tags": [
 		"ci",
 		"travis",
 		"build",
 		"tool"
 	],
-	"license": "MIT",
+	"classPath": "src",
+	"description": "Travis helper for Haxe",
+	"contributors": [
+		"back2dos",
+		"kevinresol",
+		"ciscoheat"
+	],
+	"releasenote": "Fixes JS on mac",
+	"version": "0.11.1",
+	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "lix download && haxe build-neko.hxml",
-	"dependencies":{
+	"dependencies": {
 		"tink_cli": ""
 	}
 }
