@@ -10,6 +10,8 @@ Are you tired of setting up Travis CI for all your projects? Then `travix` is fo
 1. [Reasons not to use Travix](#reasons-not-to-use-travix)
 1. [How to use git version](#how-to-use-git-version)
 
+Note: Since v0.11.0, Travix only supports Haxe 3.3+. If you need older Haxe, please use v0.10.5.
+
 
 ## Quickstart
 
