@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Fixes JS on mac",
-	"version": "0.11.1",
+	"releasenote": "Move python install script",
+	"version": "0.11.2",
 	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "lix download && haxe build-neko.hxml",
 	"dependencies": {
