@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Move python install script",
-	"version": "0.11.2",
+	"releasenote": "Fix issue with lix integration.",
+	"version": "0.11.3",
 	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "haxe -cp src --run travix.PostDownload",
 	"dependencies": {
