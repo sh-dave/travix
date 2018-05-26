@@ -40,6 +40,7 @@ Travix has individual commands for building:
 - `cs` - run tests on cs
 - `cpp` - run tests on cpp
 - `lua` - run tests on lua
+- `hl` - run tests on hashlink
 
 So instead of having to have to define all kinds of builds and figuring out the right way to run them, this will do.
 
