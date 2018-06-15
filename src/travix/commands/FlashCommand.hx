@@ -5,7 +5,7 @@ import Sys.*;
 
 class FlashCommand extends Command {
 
-  static var flashPlayerVersion = 28;
+  static var flashPlayerVersion = 30;
   static var homePath = "$HOME";
   static var flashPath = '$homePath/.macromedia/Flash_Player';
   
