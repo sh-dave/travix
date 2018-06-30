@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Fix issue with lix integration.",
-	"version": "0.11.3",
+	"releasenote": "Flash version updated",
+	"version": "0.12.0",
 	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "haxe -cp src --run travix.PostDownload",
 	"dependencies": {
