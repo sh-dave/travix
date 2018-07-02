@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Flash version updated",
-	"version": "0.12.0",
+	"releasenote": "Command line arguments can now be appended again.",
+	"version": "0.12.1",
 	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "haxe -cp src --run travix.PostDownload",
 	"dependencies": {
