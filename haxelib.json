@@ -14,8 +14,8 @@
 		"kevinresol",
 		"ciscoheat"
 	],
-	"releasenote": "Command line arguments can now be appended again.",
-	"version": "0.12.1",
+	"releasenote": "Hashlink updated to 1.6.",
+	"version": "0.12.2",
 	"url": "http://github.com/back2dos/travix/",
 	"postDownload": "haxe -cp src --run travix.PostDownload",
 	"dependencies": {
