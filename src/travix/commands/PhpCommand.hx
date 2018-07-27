@@ -97,6 +97,7 @@ class PhpCommand extends Command {
     return switch Sys.systemName() {
       case "Linux": isPHP7Required ? "php7.1" : "php5.6";
       case 'Mac': isPHP7Required ? "php71" : "php56";
+      case 'Windows': null; // No installation possible, but can still run
       case v: Travix.die('[ERROR] Don\'t know how to install PHP on $v');
     }
   }
