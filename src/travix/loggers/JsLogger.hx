@@ -10,7 +10,7 @@ class JsLogger {
         cmd: 'travix:print',
         message: s,
       });
-    else console.log(s);
+    else js.Browser.console.log(s);
   }
   
   public static function println(s:String) {
@@ -19,7 +19,7 @@ class JsLogger {
         cmd: 'travix:println',
         message: s,
       });
-    else console.log(s);
+    else js.Browser.console.log(s);
   }
   
   public static function exit(code:Int) {
