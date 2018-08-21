@@ -6,16 +6,19 @@ using sys.FileSystem;
 
 class NodeCommand extends Command {
   
-  static var VERSION_RE = ~/^v?(\d{1,})\.\d{1,}\.\d{1,}$/;
+  static var VERSION_RE = ~/(\d*)\.(\d*)\.(\d*)/;
   
   public function install() {
     if (Travix.isTravis && Travix.isMac) {
-        // TODO: remove this when travis decided to update their stock node version
         foldOutput('upgrade-nodejs', function() {
-          switch tryToRun('node', ['-v']) {
-            case Success(v) if(VERSION_RE.match(v) && Std.parseInt(VERSION_RE.matched(1)) >= 4): // do nothing
+          // homebrew will fail if current version is already latest
+          // so we need to check it first
+          switch [tryToRun('node', ['-v']), tryToRun('brew', ['info', 'node'])] {
+            case [Success(current), Success(available)]:
+              var current = VERSION_RE.match(current) ? Std.parseInt(VERSION_RE.matched(1)) : 0;
+              var available = VERSION_RE.match(available) ? Std.parseInt(VERSION_RE.matched(1)) : 0;
+              if(current < available) exec('brew', ['upgrade', 'node']);
             default:
-                exec('brew', ['update']);
                 exec('brew', ['upgrade', 'node']);
           }
         });
