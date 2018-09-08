@@ -48,6 +48,7 @@ class LuaCommand extends Command {
           exec('rm', ['-rf', 'luarocks-$luaRocksVersion']);
         } else if(Travix.isMac) {
           installPackage('lua');
+          installPackage('luarocks');
         }
 
         // Install lua libraries
