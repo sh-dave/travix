@@ -1,53 +1,42 @@
 sudo: required
 dist: trusty
 
-language: haxe
-
-os:
-  - linux
-  - osx
-
-haxe:
-  - "3.4.7"
-  - development
-
-install:
-  - haxelib dev travix .
-  - haxelib git tink_io https://github.com/haxetink/tink_io pure
-  - haxelib git tink_cli https://github.com/haxetink/tink_cli pure
-  - haxe build-neko.hxml
-  - haxelib run travix install
-  
-script:
-  - haxelib run travix interp
-  - haxelib run travix js
-  - haxelib run travix flash
-  - if [[ "$(haxe -version)" =~ ^4.* ]]; then haxelib run travix hl; fi
-  - haxelib run travix php
-  - haxelib run travix php7
-  - haxelib run travix node
-  - haxelib run travix neko
-  - if [ "$TRAVIS_OS_NAME" != "osx" ]; then haxelib run travix python; fi
-  - haxelib run travix lua
-  - haxelib run travix java
-  - haxelib run travix cs
-  - haxelib run travix cpp -lib hxcpp
-
 env:
-  secure: "XFDeQEXNPLPLHDZ2I4k++WsIm2EBffO4pJLYP5+tTS57awlzuBkyK1P4/pzmbcnBMFIrE7ebWQd4NGYIHbb2UuIg8OLwxTpkqb+wMnlzQEN2Rntc
-+09iT4/bS0TmPLNfMzeDYTgYD4W91HRUGXiCO1+n5VicosCbeoDKKNykVuqqoG3l7U1gxTxJb4NWXWOqFwcRG0jm5CfRs9l2pZ3PLjKNloeFo2fnRmrhDC+A+YC
-rmUj9MFquH8bhbMNNsoE4sJL2cDNOMINAIjhCcGsfAoCZQNf+ezdvGqYezMq8FBI1hPwbslq/tojLQwYgsqKuEP06VqY5LBESpRS62qQ5g1/Jn18TMDb/nEaEnW
-BndQFKaq4XIFCk/pRWnMxobsd8nYY0Oep8D8/JavJansh/3jnNKwo96lI40nvwS2AMY4AFTvFXyS/Or/WZKRWO9QI3dy3oULMllseiUkpx5vyqTrVreNCOe1suI
-w3vVk1hGdITEk6U+C/5Y7QpsulBySKd+Q6XoH8m6fSbgWhGdqhi8w4lE6E25XWl2Cbdi/SNbcGJZpgeM9udeQZGhlifhgimSYqRkRdhobCrhXdVygrTniK5Olyd
-JQJWxP1AEJmFZsNzbEyry8xWV2t2B2PZ8fbqXBcbX1PtliT9AHq3fsd8zRNjmRslkYveopRyLUg8E5c="
+  secure: "XFDeQEXNPLPLHDZ2I4k++WsIm2EBffO4pJLYP5+tTS57awlzuBkyK1P4/pzmbcnBMFIrE7ebWQd4NGYIHbb2UuIg8OLwxTpkqb+wMnlzQEN2Rntc+09iT4/bS0TmPLNfMzeDYTgYD4W91HRUGXiCO1+n5VicosCbeoDKKNykVuqqoG3l7U1gxTxJb4NWXWOqFwcRG0jm5CfRs9l2pZ3PLjKNloeFo2fnRmrhDC+A+YCrmUj9MFquH8bhbMNNsoE4sJL2cDNOMINAIjhCcGsfAoCZQNf+ezdvGqYezMq8FBI1hPwbslq/tojLQwYgsqKuEP06VqY5LBESpRS62qQ5g1/Jn18TMDb/nEaEnWBndQFKaq4XIFCk/pRWnMxobsd8nYY0Oep8D8/JavJansh/3jnNKwo96lI40nvwS2AMY4AFTvFXyS/Or/WZKRWO9QI3dy3oULMllseiUkpx5vyqTrVreNCOe1suIw3vVk1hGdITEk6U+C/5Y7QpsulBySKd+Q6XoH8m6fSbgWhGdqhi8w4lE6E25XWl2Cbdi/SNbcGJZpgeM9udeQZGhlifhgimSYqRkRdhobCrhXdVygrTniK5OlydJQJWxP1AEJmFZsNzbEyry8xWV2t2B2PZ8fbqXBcbX1PtliT9AHq3fsd8zRNjmRslkYveopRyLUg8E5c="
 
 jobs:
-  allow_failures:
-    - haxe: development
   include:
+    - stage: test
+      language: node_js
+      node_js: 8
+      os:
+        - linux
+        # - osx
+      install:
+        - npm i -g lix
+        - lix download
+        - haxe build-neko.hxml
+      script:
+        - lix run travix interp
+        - lix run travix js
+        - lix run travix flash
+        - lix run travix php
+        - lix run travix php7
+        - lix run travix node
+        - lix run travix neko
+        - lix run travix lua
+        - lix run travix java
+        - lix run travix cs
+        - lix run travix cpp -lib hxcpp
+        - if [[ "$(haxe -version)" =~ ^4.* ]]; then lix run travix hl; fi
+        - if [ "$TRAVIS_OS_NAME" != "osx" ]; then lix run travix python; fi
+    
     - stage: deploy
+      language: haxe
+      haxe: "3.4.7"
       os: linux
-      haxe: "3.4.2"
       script: skip
-      after_success: haxelib run travix release
-
+      after_success:
+        - haxelib install travix
+        - haxelib run travix install
+        - haxelib run travix release
