@@ -5,9 +5,15 @@ import Sys.*;
 
 class FlashCommand extends Command {
 
-  static var flashPlayerVersion = 30;
   static var homePath = "$HOME";
   static var flashPath = '$homePath/.macromedia/Flash_Player';
+
+  static function getLatestFPVersion():Array<Int> {
+    var appcast = Xml.parse(haxe.Http.requestUrl("http://fpdownload2.macromedia.com/get/flashplayer/update/current/xml/version_en_mac_pep.xml"));
+    var update = [for (update in appcast.firstElement().elementsNamed("update")) update][0];
+    var versionStr = update.get("version");
+    return versionStr.split(",").map(Std.parseInt);
+  }
   
   public function install() {
 
@@ -33,6 +39,7 @@ class FlashCommand extends Command {
 
       // Download and unpack the player, unless it exists already
       if (command("eval", ['test -f "$flashPath/flashplayerdebugger"']) != 0) {
+        var flashPlayerVersion = getLatestFPVersion()[0];
         exec('eval', ['wget -nv -O flash_player_sa_linux.tar.gz https://fpdownload.macromedia.com/pub/flashplayer/updaters/$flashPlayerVersion/flash_player_sa_linux_debug.x86_64.tar.gz']);
         exec('eval', ['tar -C "$flashPath" -xf flash_player_sa_linux.tar.gz --wildcards "flashplayerdebugger"']);
         exec('eval', ['rm -f flash_player_sa_linux.tar.gz']);
