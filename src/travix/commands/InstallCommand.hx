@@ -75,4 +75,8 @@ class InstallCommand extends Command {
   @:command
   public function python()
     new PythonCommand().install();
+  
+  @:command
+  public function hl()
+    new HashLinkCommand().install();
 }

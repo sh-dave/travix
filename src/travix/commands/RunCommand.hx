@@ -58,4 +58,8 @@ class RunCommand {
   @:command
   public function python(rest:Rest<String>)
     new PythonCommand().buildAndRun(rest);
+  
+  @:command
+  public function hl(rest:Rest<String>)
+    new HashLinkCommand().buildAndRun(rest);
 }
