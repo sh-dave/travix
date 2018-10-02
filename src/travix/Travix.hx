@@ -19,6 +19,9 @@ import haxe.macro.MacroStringTools;
 import haxe.macro.Context;
 #end
 
+/**
+ * CI Helper for Haxe
+ */
 class Travix {
   public static inline var TESTS = 'tests.hxml';
   static inline var TRAVIX_COUNTER = '.travix_counter';
@@ -108,30 +111,23 @@ class Travix {
     
   function new() {}
   
+  
+  /**
+   * Show help
+   */
   @:defaultCommand
   public function help() {
-    // println(tink.Cli.getDoc(this));
-    
-    println('Commands');
-    println('  ');
-    println('  init - initializes a project with a .travis.yml');
-    println('  install - installs dependencies');
-    println('  interp - run tests on interpreter');
-    println('  neko - run tests on neko');
-    println('  node - run tests on nodejs (with hxnodejs)');
-    println('  js - run tests on js (with phantomjs)');
-    println('  php - run tests on php 5.x');
-    println('  php7 - run tests on php 7.x');
-    println('  java - run tests on java');
-    println('  flash - run tests on flash');
-    println('  python - run tests on python');
-    println('  cs - run tests on cs');
-    println('  cpp - run tests on cpp');
-    println('  lua - run tests on lua');
-    println('  hl - run tests on hashlink');
+    println(tink.Cli.getDoc(this, new tink.cli.doc.DefaultFormatter('travix')));
   }
   
+  /**
+   * Install haxelib dependencies
+   */
   @:command public var install = new InstallCommand();
+  
+  /**
+   * Run tests without installing stuff
+   */
   @:command public var run = new RunCommand();
   
   /**
@@ -141,18 +137,24 @@ class Travix {
   public function init()
     new InitCommand().doIt();
     
+  /**
+   * Authorize haxelib
+   */
   @:command 
   public function auth(rest:Rest<String>)
     new AuthCommand().doIt(rest);
     
+  /**
+   * Release to haxelib
+   */
   @:command 
   public function release(rest:Rest<String>)
     new ReleaseCommand().doIt(rest);
   
   /**
-   *  run tests on cs
+   *  Run tests on cs
    */
-  @:command
+  @:command('cs', 'cs123456', 'cs123457')
   public function cs(rest:Rest<String>) {
     var command = new CsCommand();
     command.install();
@@ -160,7 +162,7 @@ class Travix {
   }
   
   /**
-   *  run tests on node
+   *  Run tests on node
    */
   @:command
   public function node(rest:Rest<String>) {
@@ -170,7 +172,7 @@ class Travix {
   }
   
   /**
-   *  run tests on cpp
+   *  Run tests on cpp
    */
   @:command
   public function cpp(rest:Rest<String>) {
@@ -180,7 +182,7 @@ class Travix {
   }
   
   /**
-   *  run tests on flash
+   *  Run tests on flash
    */
   @:command
   public function flash(rest:Rest<String>) {
@@ -190,7 +192,7 @@ class Travix {
   }
 
   /**
-   *  run tests on hashlink
+   *  Run tests on hashlink
    */
   @:command
   public function hl(rest:Rest<String>) {
@@ -200,7 +202,7 @@ class Travix {
   }
 
   /**
-   *  run tests on interp
+   *  Run tests on interp
    */
   @:command
   public function interp(rest:Rest<String>) {
@@ -210,7 +212,7 @@ class Travix {
   }
   
   /**
-   *  run tests on java
+   *  Run tests on java
    */
   @:command
   public function java(rest:Rest<String>) {
@@ -220,7 +222,7 @@ class Travix {
   }
   
   /**
-   *  run tests on js
+   *  Run tests on js
    */
   @:command
   public function js(rest:Rest<String>) {
@@ -230,7 +232,7 @@ class Travix {
   }
   
   /**
-   *  run tests on lua
+   *  Run tests on lua
    */
   @:command
   public function lua(rest:Rest<String>) {
@@ -240,7 +242,7 @@ class Travix {
   }
   
   /**
-   *  run tests on neko
+   *  Run tests on neko
    */
   @:command
   public function neko(rest:Rest<String>) {
@@ -250,7 +252,7 @@ class Travix {
   }
   
   /**
-   *  run tests on php
+   *  Run tests on php
    */
   @:command
   public function php(rest:Rest<String>) {
@@ -261,7 +263,7 @@ class Travix {
   }
   
   /**
-   *  run tests on php7
+   *  Run tests on php7
    */
   @:command
   public function php7(rest:Rest<String>) {
@@ -272,7 +274,7 @@ class Travix {
   }
   
   /**
-   *  run tests on python
+   *  Run tests on python
    */
   @:command
   public function python(rest:Rest<String>) {
