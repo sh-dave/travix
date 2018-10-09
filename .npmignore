@@ -1,8 +1,0 @@
-.vscode
-bin/*
-!bin/travix.js
-src
-tests
-/*.*
-!package.json
-Vagrantfile
