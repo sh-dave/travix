@@ -24,6 +24,7 @@ install:
   - npm i -g lix
   - lix install haxe $HAXE_VERSION
   - lix download
+  - haxe build-neko.hxml
   
 script:
   - lix run travix interp
