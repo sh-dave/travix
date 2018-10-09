@@ -43,7 +43,7 @@ class JsCommand extends Command {
       if(!index.exists()) index.saveContent(defaultIndexHtml());
       var runPhantom = 'bin/js/runPhantom.js';
       if(!runPhantom.exists()) runPhantom.saveContent(defaultPhantomScript());
-      var phantomjsBinPath = Travix.isMac ? 'phantomjs' : '$PHANTOMJS_VERISON/bin/phantomjs';
+      var phantomjsBinPath = Travix.isLinux ? '$PHANTOMJS_VERISON/bin/phantomjs' : 'phantomjs';
       exec(phantomjsBinPath, ['-v']);
       exec(phantomjsBinPath, ['--web-security=no', runPhantom]);
     });
