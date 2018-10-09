@@ -141,9 +141,7 @@ class Travix {
    * Authorize haxelib
    */
   @:command 
-  public function auth(rest:Rest<String>)
-    new AuthCommand().doIt(rest);
-    
+  public var auth = new AuthCommand();
   /**
    * Release to haxelib
    */
