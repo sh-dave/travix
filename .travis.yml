@@ -1,42 +1,57 @@
 sudo: required
 dist: trusty
 
+stages:
+  - test
+  - deploy
+
+language: node_js
+node_js: 8
+
+cache:
+  directories:
+    - $HOME/haxe
+
+os:
+  - linux
+  # - osx
+
 env:
-  secure: "XFDeQEXNPLPLHDZ2I4k++WsIm2EBffO4pJLYP5+tTS57awlzuBkyK1P4/pzmbcnBMFIrE7ebWQd4NGYIHbb2UuIg8OLwxTpkqb+wMnlzQEN2Rntc+09iT4/bS0TmPLNfMzeDYTgYD4W91HRUGXiCO1+n5VicosCbeoDKKNykVuqqoG3l7U1gxTxJb4NWXWOqFwcRG0jm5CfRs9l2pZ3PLjKNloeFo2fnRmrhDC+A+YCrmUj9MFquH8bhbMNNsoE4sJL2cDNOMINAIjhCcGsfAoCZQNf+ezdvGqYezMq8FBI1hPwbslq/tojLQwYgsqKuEP06VqY5LBESpRS62qQ5g1/Jn18TMDb/nEaEnWBndQFKaq4XIFCk/pRWnMxobsd8nYY0Oep8D8/JavJansh/3jnNKwo96lI40nvwS2AMY4AFTvFXyS/Or/WZKRWO9QI3dy3oULMllseiUkpx5vyqTrVreNCOe1suIw3vVk1hGdITEk6U+C/5Y7QpsulBySKd+Q6XoH8m6fSbgWhGdqhi8w4lE6E25XWl2Cbdi/SNbcGJZpgeM9udeQZGhlifhgimSYqRkRdhobCrhXdVygrTniK5OlydJQJWxP1AEJmFZsNzbEyry8xWV2t2B2PZ8fbqXBcbX1PtliT9AHq3fsd8zRNjmRslkYveopRyLUg8E5c="
+  - HAXE_VERSION=3.4.7
+  - HAXE_VERSION=latest
+  
+install:
+  - npm i -g lix
+  - lix install haxe $HAXE_VERSION
+  - lix download
+  
+script:
+  - lix run travix interp
+  - lix run travix js
+  - lix run travix flash
+  - lix run travix php
+  - lix run travix php7
+  - lix run travix node
+  - lix run travix neko
+  - lix run travix lua
+  - lix run travix java
+  # - lix run travix cs # https://github.com/back2dos/travix/issues/92
+  - lix run travix cpp -lib hxcpp
+  - if [[ "$(haxe -version)" =~ ^4.* ]]; then lix run travix hl; fi
+  - if [ "$TRAVIS_OS_NAME" != "osx" ]; then lix run travix python; fi
 
 jobs:
   include:
-    - stage: test
-      language: node_js
-      node_js: 8
-      os:
-        - linux
-        # - osx
+    # - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
+    - stage: deploy
+      os: linux
       install:
         - npm i -g lix
         - lix download
         - haxe build-neko.hxml
-      script:
-        - lix run travix interp
-        - lix run travix js
-        - lix run travix flash
-        - lix run travix php
-        - lix run travix php7
-        - lix run travix node
-        - lix run travix neko
-        - lix run travix lua
-        - lix run travix java
-        - lix run travix cs
-        - lix run travix cpp -lib hxcpp
-        - if [[ "$(haxe -version)" =~ ^4.* ]]; then lix run travix hl; fi
-        - if [ "$TRAVIS_OS_NAME" != "osx" ]; then lix run travix python; fi
-    
-    - stage: deploy
-      language: haxe
-      haxe: "3.4.7"
-      os: linux
       script: skip
+      env:
+        secure: XFDeQEXNPLPLHDZ2I4k++WsIm2EBffO4pJLYP5+tTS57awlzuBkyK1P4/pzmbcnBMFIrE7ebWQd4NGYIHbb2UuIg8OLwxTpkqb+wMnlzQEN2Rntc+09iT4/bS0TmPLNfMzeDYTgYD4W91HRUGXiCO1+n5VicosCbeoDKKNykVuqqoG3l7U1gxTxJb4NWXWOqFwcRG0jm5CfRs9l2pZ3PLjKNloeFo2fnRmrhDC+A+YCrmUj9MFquH8bhbMNNsoE4sJL2cDNOMINAIjhCcGsfAoCZQNf+ezdvGqYezMq8FBI1hPwbslq/tojLQwYgsqKuEP06VqY5LBESpRS62qQ5g1/Jn18TMDb/nEaEnWBndQFKaq4XIFCk/pRWnMxobsd8nYY0Oep8D8/JavJansh/3jnNKwo96lI40nvwS2AMY4AFTvFXyS/Or/WZKRWO9QI3dy3oULMllseiUkpx5vyqTrVreNCOe1suIw3vVk1hGdITEk6U+C/5Y7QpsulBySKd+Q6XoH8m6fSbgWhGdqhi8w4lE6E25XWl2Cbdi/SNbcGJZpgeM9udeQZGhlifhgimSYqRkRdhobCrhXdVygrTniK5OlydJQJWxP1AEJmFZsNzbEyry8xWV2t2B2PZ8fbqXBcbX1PtliT9AHq3fsd8zRNjmRslkYveopRyLUg8E5c=
       after_success:
-        - haxelib install travix
-        - haxelib run travix install
-        - haxelib run travix release
+        - lix run travix install
+        - lix run travix release
