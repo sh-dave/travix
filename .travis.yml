@@ -41,13 +41,13 @@ script:
   - lix run travix lua "${args[@]}"
   - lix run travix java "${args[@]}"
   # - lix run travix cs "${args[@]}" # https://github.com/back2dos/travix/issues/92
-  - lix run travix cpp "${args[@]}" -lib hxcpp
+  - lix run travix cpp "${args[@]}"
   - lix run travix hl "${args[@]}"
   - if [ "$TRAVIS_OS_NAME" != "osx" ]; then lix run travix python "${args[@]}"; fi
 
 jobs:
   include:
-    - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
+    # - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
     - stage: deploy
       os: linux
       install:
