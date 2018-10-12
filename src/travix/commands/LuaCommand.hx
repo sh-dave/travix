@@ -57,6 +57,7 @@ class LuaCommand extends Command {
         exec('eval', ['sudo luarocks install luv 1.9.1-1']);
         exec('eval', ['sudo luarocks install luasocket 3.0rc1-2']);
         exec('eval', ['sudo luarocks install environ 0.1.0-1']);
+        exec('eval', ['sudo luarocks install luautf8 0.1.1-1']);
       });
     }
 
