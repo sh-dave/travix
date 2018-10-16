@@ -13,13 +13,14 @@ cache:
     - $HOME/haxe
 
 os:
-  # - linux
-  # - osx
+  - linux
+  - osx
   - windows
 
 env:
   - HAXE_VERSION=3.4.7
-  - HAXE_VERSION=latest
+  - HAXE_VERSION=4.0.0-preview.4
+  # - HAXE_VERSION=latest
   
 before_install:
   - args=()
@@ -34,13 +35,13 @@ install:
   
 script:
   # - lix run travix interp "${args[@]}"
-  # - lix run travix js "${args[@]}"
+  - lix run travix js "${args[@]}"
   # - lix run travix flash "${args[@]}"
   - lix run travix php "${args[@]}"
   - lix run travix php7 "${args[@]}"
   # - lix run travix node "${args[@]}"
   # - lix run travix neko "${args[@]}"
-  # - lix run travix lua "${args[@]}"
+  - lix run travix lua "${args[@]}"
   # - lix run travix java "${args[@]}"
   # - lix run travix cs "${args[@]}" # https://github.com/back2dos/travix/issues/92
   # - lix run travix cpp "${args[@]}"
@@ -49,7 +50,7 @@ script:
 
 jobs:
   include:
-    - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
+    # - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
     - stage: deploy
       os: linux
       install:
