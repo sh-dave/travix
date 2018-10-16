@@ -14,7 +14,8 @@ cache:
 
 os:
   - linux
-  # - osx
+  - osx
+  - windows
 
 env:
   - HAXE_VERSION=3.4.7
