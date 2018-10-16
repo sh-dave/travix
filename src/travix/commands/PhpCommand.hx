@@ -47,7 +47,7 @@ class PhpCommand extends Command {
               exec('brew', ['php', 'link', phpPackage]);
               
           case 'Windows':
-              exec('cinst', ['php', '--version', phpPackage]);
+              installPackage('php', ['--version', phpPackage]);
             
           case v:
             println('[ERROR] Don\'t know how to install PHP on $v');

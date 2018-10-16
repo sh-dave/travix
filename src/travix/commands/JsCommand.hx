@@ -12,10 +12,7 @@ class JsCommand extends Command {
   public function install() {
 
     if(Travix.isTravis) {
-      if(Travix.isMac) {
-        installPackage('phantomjs');
-      } else if(Travix.isLinux) {
-        
+      if(Travix.isLinux) {
         foldOutput('phantomjs-update', function() {
           installPackages([
             'build-essential',
@@ -32,6 +29,10 @@ class JsCommand extends Command {
           exec('tar', ['xvjf', '$PHANTOMJS_VERISON.tar.bz2']);
 
         });
+      }
+      
+      if(Travix.isMac || Travix.isWindows) {
+        installPackage('phantomjs');
       }
     }
   }

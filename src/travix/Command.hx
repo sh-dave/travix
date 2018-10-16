@@ -211,6 +211,7 @@ class Command {
    * @param additionalArgs additional flags/options to be passed to the package manager
    */
   function installPackage(packageName:String, ?additionalArgs:Array<String>) {
+    if (additionalArgs == null) additionalArgs = [];
     foldOutput('installPackage-$packageName', function() {
       switch Sys.systemName() {
         case 'Linux':
@@ -218,13 +219,15 @@ class Command {
             exec('sudo', ['apt-get', 'update', '-qq']);
             isFirstPackageInstallation = false;
           }
-          exec('sudo', ['apt-get', 'install', '--no-install-recommends', '-qq', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
+          exec('sudo', ['apt-get', 'install', '--no-install-recommends', '-qq', packageName].concat(additionalArgs));
         case 'Mac':
           if (isFirstPackageInstallation) {
             exec('brew', ['update']); // to prevent "Homebrew must be run under Ruby 2.3!" https://github.com/travis-ci/travis-ci/issues/8552#issuecomment-335321197
             isFirstPackageInstallation = false;
           }
-          exec('brew', ['install', packageName].concat(if (additionalArgs == null) [] else additionalArgs));
+          exec('brew', ['install', packageName].concat(additionalArgs));
+        case 'Windows':
+          exec('cinst', [packageName].concat(additionalArgs));
         case v:
           println('WARN: Don\'t know how to install packages on $v');
       }
