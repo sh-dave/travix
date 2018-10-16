@@ -181,9 +181,19 @@ class Command {
     if (args != null)
       a = a.concat(args);
     println('> ' + a.join(' '));
-    switch command(cmd, args) {
+    var proc = new sys.io.Process(cmd, args);
+    
+    function log(v) switch v {
+      case '': // skip;
+      case v: Sys.println(v);
+    }
+    
+    switch proc.exitCode() {
       case 0:
-      case v: exit(v);
+        log(proc.stdout.readAll().toString());
+      case v:
+        log(proc.stderr.readAll().toString());
+        exit(v);
     }
   }
 
