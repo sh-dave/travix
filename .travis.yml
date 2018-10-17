@@ -46,7 +46,6 @@ script:
   # - lix run travix cs "${args[@]}" # https://github.com/back2dos/travix/issues/92
   # - lix run travix cpp "${args[@]}"
   # - lix run travix hl "${args[@]}"
-  - cinst python3
   - if [ "$TRAVIS_OS_NAME" != "osx" ]; then lix run travix python "${args[@]}"; fi
 
 jobs:
