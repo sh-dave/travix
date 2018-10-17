@@ -190,8 +190,10 @@ class Command {
     
     switch proc.exitCode() {
       case 0:
+        Sys.println('exit code: 0');
         log(proc.stdout.readAll().toString());
       case v:
+        Sys.println('exit code: $v');
         log(proc.stderr.readAll().toString());
         exit(v);
     }
