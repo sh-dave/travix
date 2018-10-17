@@ -14,8 +14,8 @@ class PythonCommand extends Command {
       } else {
         installPackage('python3');
         if(Travix.isWindows) {
-          exec('python3', ['--version']);
-          exec('python', ['--version']);
+          Sys.command('python', ['--version']);
+          Sys.command('python3', ['--version']);
         }
       }
     }
