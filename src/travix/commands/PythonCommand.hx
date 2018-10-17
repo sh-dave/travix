@@ -13,6 +13,10 @@ class PythonCommand extends Command {
         exec('brew', ['upgrade', "python"]);
       } else {
         installPackage('python3');
+        if(Travix.isWindows) {
+          Sys.command('python', ['--version']);
+          Sys.command('python3', ['--version']);
+        }
       }
     }
   }
