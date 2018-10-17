@@ -228,6 +228,7 @@ class Command {
           exec('brew', ['install', packageName].concat(additionalArgs));
         case 'Windows':
           exec('cinst', [packageName].concat(additionalArgs));
+          exec('refreshenv');
         case v:
           println('WARN: Don\'t know how to install packages on $v');
       }
